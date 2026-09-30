@@ -303,7 +303,9 @@ dialog.dialog::backdrop { background: oklch(0 0 0 / 55%); animation: fade var(--
 .provider-card { display: flex; flex-direction: column; gap: 12px; position: relative; }
 .provider-card:not(.incompatible):hover { background: var(--surface-2); transform: translateY(-2px); }
 .provider-card.incompatible { opacity: 0.6; }
-.monogram { width: 40px; height: 40px; border-radius: var(--radius-sm); display: grid; place-items: center; font: 500 15px var(--font-display); flex: none; }
+/* neutral badge behind an official platform mark (the mark itself is never re-tinted) */
+.monogram { width: 40px; height: 40px; border-radius: var(--radius-sm); display: grid; place-items: center; font: 500 15px var(--font-display); flex: none; background: oklch(0.27 0.012 var(--hue)); color: var(--text); border: 1px solid var(--md-outline-variant); }
+.monogram svg { display: block; }
 .reasons { margin: 0; padding-left: 18px; font-size: 13px; color: var(--text-2); }
 
 /* ---------- charts ---------- */
@@ -342,7 +344,7 @@ dialog.dialog::backdrop { background: oklch(0 0 0 / 55%); animation: fade var(--
 .hub .link { stroke: var(--md-outline-variant); stroke-width: 2; stroke-dasharray: 3 9; stroke-linecap: round; animation: dash 1.2s linear infinite; }
 .hub .packet { fill: var(--md-tertiary); animation: travel 2.6s var(--ease) infinite; filter: drop-shadow(0 0 5px var(--md-tertiary)); }
 .hub .ring { fill: none; stroke: var(--md-primary); transform-origin: 50% 50%; transform-box: fill-box; animation: ripple-out 3.2s ease-out infinite; }
-.hub .node { fill: var(--md-surface-highest); stroke: var(--md-outline-variant); }
+.hub .node { fill: oklch(0.27 0.012 var(--hue)); stroke: var(--md-outline-variant); stroke-width: 1.5; }
 .hub .node-text { fill: var(--md-on-surface); font: 500 13px var(--font-display); text-anchor: middle; dominant-baseline: central; }
 .hub .node-label { fill: var(--md-on-surface-variant); font: 400 11px var(--font-body); text-anchor: middle; }
 .hub .core { fill: var(--md-primary); transform-origin: 50% 50%; transform-box: fill-box; animation: spin 24s linear infinite; }

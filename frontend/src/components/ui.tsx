@@ -1,22 +1,24 @@
 import { useState, type ReactNode } from "react";
 import { ACTIVE, type Deployment, type Status } from "../api";
+import { BRAND_ICONS } from "./brandIcons";
 import { IconAlert, IconCheck, IconInfo, IconX } from "./icons";
 
-// Tonal container + on-container pairs (Material 3), one fixed hue per platform.
-const tone = (hue: number) => ({ color: `oklch(0.42 0.08 ${hue})`, on: `oklch(0.94 0.05 ${hue})` });
-export const PROVIDER_META: Record<string, { name: string; mono: string; color: string; on: string }> = {
-  render: { name: "Render", mono: "Rd", ...tone(235) },
-  vercel: { name: "Vercel", mono: "Vc", ...tone(310) },
-  netlify: { name: "Netlify", mono: "Nf", ...tone(175) },
-  github_pages: { name: "GitHub Pages", mono: "GP", ...tone(275) },
-  cloudflare_pages: { name: "Cloudflare Pages", mono: "CF", ...tone(55) },
+// Platform names and their official marks (see brandIcons.ts). `mono` is only a text fallback.
+export const PROVIDER_META: Record<string, { name: string; mono: string }> = {
+  render: { name: "Render", mono: "Rd" },
+  vercel: { name: "Vercel", mono: "Vc" },
+  netlify: { name: "Netlify", mono: "Nf" },
+  github_pages: { name: "GitHub Pages", mono: "GP" },
+  cloudflare_pages: { name: "Cloudflare Pages", mono: "CF" },
 };
 
 export function ProviderMark({ provider, size = 40 }: { provider: string; size?: number }) {
-  const meta = PROVIDER_META[provider] ?? { mono: "?", color: "var(--surface-3)", on: "var(--text)" };
+  const brand = BRAND_ICONS[provider];
   return (
-    <span className="monogram" style={{ background: meta.color, color: meta.on, width: size, height: size, fontSize: size * 0.38 }} aria-hidden="true">
-      {meta.mono}
+    <span className="monogram" style={{ width: size, height: size, fontSize: size * 0.38 }} aria-hidden="true">
+      {brand ? (
+        <svg width={size * 0.56} height={size * 0.56} viewBox="0 0 24 24" fill={brand.color}><path d={brand.path} /></svg>
+      ) : (PROVIDER_META[provider]?.mono ?? "?")}
     </span>
   );
 }

@@ -1,6 +1,7 @@
 // Animated charts and looping illustrations. Charts render real numbers only; HubOrbit is a
 // decorative illustration of how the hub routes an app to the five platforms.
 import { useEffect, useState } from "react";
+import { BRAND_ICONS } from "./brandIcons";
 import { cookiePath } from "./Logo";
 import { PROVIDER_META, ProviderMark } from "./ui";
 
@@ -128,7 +129,7 @@ const CORE = cookiePath(190, 190, 40, 9, 0.09);
 export function HubOrbit() {
   const nodes = ORDER.map((key, i) => {
     const a = (-90 + i * 72) * (Math.PI / 180);
-    return { key, x: 190 + 140 * Math.cos(a), y: 190 + 140 * Math.sin(a), meta: PROVIDER_META[key] };
+    return { key, x: 190 + 140 * Math.cos(a), y: 190 + 140 * Math.sin(a), meta: PROVIDER_META[key], brand: BRAND_ICONS[key] };
   });
   return (
     <svg className="hub" viewBox="0 0 380 392" aria-hidden="true">
@@ -150,8 +151,9 @@ export function HubOrbit() {
       <circle className="core-glyph" cx="177" cy="190" r="8" />
       {nodes.map((n, i) => (
         <g key={n.key} className="bob" style={{ animationDelay: `${i * 0.6}s` }}>
-          <circle className="node" cx={n.x} cy={n.y} r="26" style={{ fill: n.meta.color, stroke: "none" }} />
-          <text className="node-text" x={n.x} y={n.y} style={{ fill: n.meta.on }}>{n.meta.mono}</text>
+          <circle className="node" cx={n.x} cy={n.y} r="27" />
+          {/* official mark, 26px, centred on the node */}
+          <path d={n.brand.path} fill={n.brand.color} transform={`translate(${(n.x - 13).toFixed(1)} ${(n.y - 13).toFixed(1)}) scale(${26 / 24})`} />
           <text className="node-label" x={n.x} y={n.y + 42}>{n.meta.name}</text>
         </g>
       ))}

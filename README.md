@@ -99,3 +99,10 @@ provider, opens the returned URL, and destroys the resource. The Providers page 
 [GitHub integration](docs/github-integration.md) · [Provider guide](docs/provider-guide.md) ·
 [Troubleshooting](docs/troubleshooting.md) · [FAQs](docs/faqs.md) ·
 [Project report content](docs/project-report-content.md)
+
+## Trademarks
+
+Render, Vercel, Netlify, GitHub and Cloudflare names and logos are trademarks of their respective
+owners. They appear only to identify the platforms Git2Live can deploy to. Git2Live is an independent
+student project and is not affiliated with or endorsed by them. Logo path data comes from
+[Simple Icons](https://simpleicons.org) (CC0-1.0).
