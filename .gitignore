@@ -25,3 +25,4 @@ frontend/.vercel/
 Thumbs.db
 .vscode/
 .idea/
+!frontend/.env.production

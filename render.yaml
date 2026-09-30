@@ -2,7 +2,7 @@
 # Values marked sync: false are entered in the Render dashboard; they are never committed.
 services:
   - type: web
-    name: clouddeploy-hub-api
+    name: clouddeploy-hub
     runtime: python
     plan: free
     region: oregon
@@ -18,7 +18,7 @@ services:
         sync: false
       - key: FRONTEND_URL          # e.g. https://clouddeploy-hub.vercel.app
         sync: false
-      - key: BACKEND_URL           # e.g. https://clouddeploy-hub-api.onrender.com
+      - key: BACKEND_URL           # e.g. https://clouddeploy-hub.onrender.com
         sync: false
       - key: CORS_ORIGIN_REGEX     # optional, e.g. ^https://clouddeploy-hub-[a-z0-9-]+\.vercel\.app$
         sync: false
