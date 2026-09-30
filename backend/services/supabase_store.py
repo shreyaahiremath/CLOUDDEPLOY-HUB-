@@ -11,6 +11,8 @@ So a Render restart or spin-down loses nothing. Requires a single backend instan
 """
 from __future__ import annotations
 
+import base64
+import json
 import logging
 import queue
 import threading
@@ -28,6 +30,18 @@ BUCKET = "project-sources"
 # Large blobs go to Storage instead of a table row.
 UNSYNCED_TABLES = {"project_sources"}
 PAGE = 1000
+
+
+def _jwt_role(key: str) -> str | None:
+    """Role claim of a legacy Supabase JWT key (anon / service_role), without verifying it."""
+    parts = key.split(".")
+    if len(parts) != 3:
+        return None
+    try:
+        payload = parts[1] + "=" * (-len(parts[1]) % 4)
+        return json.loads(base64.urlsafe_b64decode(payload)).get("role")
+    except (ValueError, json.JSONDecodeError):
+        return None
 
 
 def as_utc(dt: datetime) -> datetime:
@@ -53,9 +67,9 @@ class SupabaseStore:
         self.error = None
         if not self.enabled:
             return
-        if key.startswith("sb_publishable_"):
-            self.error = ("SUPABASE_SECRET_KEY is the publishable key. Use the secret key (sb_secret_...) from "
-                          "Supabase > Project Settings > API Keys. The publishable key is public and cannot protect user data.")
+        if key.startswith("sb_publishable_") or _jwt_role(key) == "anon":
+            self.error = ("SUPABASE_SECRET_KEY is a public key (publishable / anon). Use the secret key (sb_secret_... or "
+                          "service_role) from Supabase > Project Settings > API Keys. Public keys cannot protect user data.")
             return
         base = url.rstrip("/")
         headers = {"apikey": key, "Authorization": f"Bearer {key}"}

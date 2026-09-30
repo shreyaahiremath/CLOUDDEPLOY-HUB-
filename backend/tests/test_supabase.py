@@ -91,11 +91,22 @@ def test_rollback_sends_nothing(store):
     assert not upsert.called
 
 
-def test_publishable_key_is_refused(store):
-    store.configure(URL, "sb_publishable_xyz")
+@pytest.mark.parametrize("key", [
+    "sb_publishable_xyz",
+    "eyJhbGciOiJIUzI1NiJ9." + __import__("base64").urlsafe_b64encode(b'{"role":"anon"}').decode().rstrip("=") + ".sig",
+])
+def test_public_keys_are_refused(store, key):
+    store.configure(URL, key)
     store.bootstrap(engine, Base.metadata)
     assert not store.ready and "secret key" in store.error
     assert store.status()["ok"] is False
+
+
+def test_service_role_jwt_is_accepted(store):
+    import base64
+    key = "eyJhbGciOiJIUzI1NiJ9." + base64.urlsafe_b64encode(b'{"role":"service_role"}').decode().rstrip("=") + ".sig"
+    store.configure(URL, key)
+    assert store.enabled and store.error is None
 
 
 @respx.mock
