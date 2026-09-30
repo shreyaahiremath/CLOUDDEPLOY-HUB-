@@ -35,7 +35,7 @@ No AWS, Azure, GCP, Oracle Cloud or other paid/credit-based infrastructure is in
 - **GitHub integration**: username field (identity only) + real OAuth, repository and branch browser,
   username-mismatch warning, encrypted token storage, token revocation on disconnect.
 - **Local upload**: folder drag-and-drop or `.zip`, with validation for path traversal, size limits,
-  `.env` files, keys and secrets, and executables. Uploads are stored in the database so they survive restarts.
+  `.env` files, keys and secrets, and executables. Uploads are stored in Supabase Storage so they survive restarts.
 - **Local project → GitHub**: review the exact file list, choose private/public, auto `.gitignore`.
 - **Project Analyzer**: language, framework, build files, app type, commands, Dockerfile validation.
 - **Compatibility engine**: compatible / needs adaptation / not compatible, per platform, with reasons.
@@ -49,7 +49,7 @@ No AWS, Azure, GCP, Oracle Cloud or other paid/credit-based infrastructure is in
 |---|---|---|
 | Frontend | React 19, Vite, TypeScript, React Router | Vercel |
 | Backend | FastAPI, SQLAlchemy 2.0, Pydantic, httpx | Render |
-| Database | Supabase Postgres (SQLite for local development) | Supabase |
+| Database | Supabase, through its HTTPS API + Storage (SQLite working copy; SQLite only for local development) | Supabase |
 | Auth | Google OpenID Connect (users), GitHub OAuth (repositories) | |
 
 ## Repository layout
@@ -57,7 +57,7 @@ No AWS, Azure, GCP, Oracle Cloud or other paid/credit-based infrastructure is in
 ```text
 backend/            FastAPI app (api/, models/, schemas/, services/, workers/, database/, main.py)
   services/deployment/  base.py render.py vercel.py netlify.py github_pages.py cloudflare.py
-  tests/            pytest suite (47 tests)
+  tests/            pytest suite (54 tests)
 frontend/           React + Vite + TypeScript app (vercel.json included)
 docs/               architecture, guides, FAQs, report content
 samples/            sample-project (static) and sample-fastapi, for integration testing only

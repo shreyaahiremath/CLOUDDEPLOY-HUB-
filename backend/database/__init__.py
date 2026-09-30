@@ -1,4 +1,10 @@
-"""Database engine. Uses Supabase Postgres when DATABASE_URL is set, SQLite locally otherwise."""
+"""Database layer.
+
+SQLAlchemy always talks to a local SQLite file. When Supabase is configured (SUPABASE_URL +
+SUPABASE_SECRET_KEY) that file is only a working copy: it is filled from Supabase at startup and
+every committed change is written back through Supabase's HTTPS API. No Postgres connection string
+or database password is involved. See backend/services/supabase_store.py.
+"""
 from __future__ import annotations
 
 from collections.abc import Iterator
@@ -8,43 +14,18 @@ from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 from backend.config import settings
 
+DATABASE_URL = f"sqlite:///{(settings.data_dir / 'clouddeploy.db').as_posix()}"
 
-def normalize_url(url: str) -> str:
-    """Accept the connection string exactly as Supabase shows it and pick the psycopg 3 driver."""
-    placeholders = ("PUT-", "[YOUR-PASSWORD]", "<db-password>", "<region>")
-    if any(p in url for p in placeholders):
-        raise RuntimeError(
-            "DATABASE_URL still contains a placeholder. Set it to the Supabase Transaction pooler URI "
-            "(Supabase > Connect > Transaction pooler, port 6543) with your database password filled in."
-        )
-    for prefix in ("postgres://", "postgresql://"):
-        if url.startswith(prefix):
-            url = "postgresql+psycopg://" + url[len(prefix):]
-    if url.startswith("postgresql+psycopg://") and "supabase" in url and "sslmode=" not in url:
-        url += ("&" if "?" in url else "?") + "sslmode=require"
-    return url
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 
 
-DATABASE_URL = normalize_url(settings.database_url) if settings.database_url else (
-    f"sqlite:///{(settings.data_dir / 'clouddeploy.db').as_posix()}"
-)
-IS_SQLITE = DATABASE_URL.startswith("sqlite")
+@event.listens_for(engine, "connect")
+def _sqlite_pragmas(dbapi_conn, _record):  # pragma: no cover - driver hook
+    cur = dbapi_conn.cursor()
+    cur.execute("PRAGMA journal_mode=WAL")
+    cur.execute("PRAGMA foreign_keys=ON")
+    cur.close()
 
-if IS_SQLITE:
-    engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-
-    @event.listens_for(engine, "connect")
-    def _sqlite_pragmas(dbapi_conn, _record):  # pragma: no cover - driver hook
-        cur = dbapi_conn.cursor()
-        cur.execute("PRAGMA journal_mode=WAL")
-        cur.execute("PRAGMA foreign_keys=ON")
-        cur.close()
-else:
-    # prepare_threshold=None keeps psycopg compatible with Supabase's transaction pooler (port 6543).
-    engine = create_engine(
-        DATABASE_URL, pool_pre_ping=True, pool_size=5, max_overflow=5, pool_recycle=300,
-        connect_args={"prepare_threshold": None},
-    )
 
 SessionLocal = sessionmaker(bind=engine, expire_on_commit=False)
 
@@ -61,7 +42,17 @@ def get_db() -> Iterator[Session]:
         db.close()
 
 
+_sync_installed = False
+
+
 def init_db() -> None:
     from backend import models  # noqa: F401  (registers tables)
+    from backend.services import supabase_store
 
+    global _sync_installed
     Base.metadata.create_all(engine)
+    if not _sync_installed:
+        supabase_store.install(SessionLocal, Base.metadata)
+        _sync_installed = True
+    supabase_store.store.configure(settings.supabase_url, settings.supabase_secret_key)
+    supabase_store.store.bootstrap(engine, Base.metadata)

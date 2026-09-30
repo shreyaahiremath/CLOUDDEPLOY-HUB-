@@ -9,6 +9,7 @@ import zipfile
 from pathlib import Path
 
 from backend.config import settings
+from backend.services import supabase_store
 from backend.services.workspace.validation import ValidationReport, normalize_path, validate_files
 
 
@@ -72,10 +73,11 @@ def ensure_workspace(db, project) -> Path | None:
     if project.source_type != "upload" or db is None:
         return None
     source = db.get(ProjectSource, project.id)
-    if source is None:
+    archive = source.archive if source is not None else supabase_store.store.get_source(project.id)
+    if archive is None:
         return None
     files: dict[str, bytes] = {}
-    with zipfile.ZipFile(io.BytesIO(source.archive)) as zf:
+    with zipfile.ZipFile(io.BytesIO(archive)) as zf:
         for info in zf.infolist():
             rel = normalize_path(info.filename)
             if rel and not info.is_dir():
@@ -87,8 +89,10 @@ def ensure_workspace(db, project) -> Path | None:
     return root
 
 
-def delete_workspace(project_id: int) -> None:
+def delete_workspace(project_id: int, *, stored_copy: bool = False) -> None:
     shutil.rmtree(settings.workspaces_dir / str(project_id), ignore_errors=True)
+    if stored_copy:
+        supabase_store.store.delete_source(project_id)
 
 
 def read_tree(root: Path, sub_dir: str = "") -> dict[str, bytes]:

@@ -14,7 +14,9 @@ services:
         value: 3.12.8
       - key: SECRET_KEY            # encrypts stored GitHub tokens; must stay stable across restarts
         generateValue: true
-      - key: DATABASE_URL          # Supabase → Connect → Transaction pooler URI
+      - key: SUPABASE_URL          # https://<project-ref>.supabase.co
+        sync: false
+      - key: SUPABASE_SECRET_KEY   # Supabase → Project Settings → API Keys → Secret key (sb_secret_...)
         sync: false
       - key: FRONTEND_URL          # e.g. https://clouddeploy-hub.vercel.app
         sync: false

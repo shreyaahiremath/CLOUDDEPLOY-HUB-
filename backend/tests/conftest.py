@@ -7,7 +7,8 @@ import tempfile
 _TMP = tempfile.mkdtemp(prefix="cdh-test-")
 os.environ["CDH_DATA_DIR"] = _TMP
 os.environ["SECRET_KEY"] = "test-secret"
-os.environ["DATABASE_URL"] = ""
+os.environ["SUPABASE_URL"] = ""
+os.environ["SUPABASE_SECRET_KEY"] = ""
 os.environ.update({
     "RENDER_API_KEY": "rnd_test", "VERCEL_TOKEN": "vc_test", "NETLIFY_AUTH_TOKEN": "nf_test",
     "CLOUDFLARE_API_TOKEN": "cf_test", "CLOUDFLARE_ACCOUNT_ID": "acc123",

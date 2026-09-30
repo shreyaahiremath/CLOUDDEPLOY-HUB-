@@ -44,7 +44,8 @@ def google_start(db: Session = Depends(get_db)) -> dict:
     if not settings.google_configured:
         raise HTTPException(400, "Google sign-in is not configured. Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET on the backend.")
     cutoff = datetime.now(timezone.utc) - timedelta(minutes=15)
-    db.query(OAuthState).filter(OAuthState.created_at < cutoff).delete()
+    for stale in db.query(OAuthState).filter(OAuthState.created_at < cutoff).all():
+        db.delete(stale)
     state = new_state()
     db.add(OAuthState(state=state, purpose="google"))
     db.commit()

@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from backend.database import get_db
 from backend.models import Deployment, DeploymentStatus as S, Project, User
 from backend.services.auth import current_user
-from backend.schemas import DeployIn, deployment_out
+from backend.schemas import DeployIn, deployment_out, iso
 from backend.services.deployment import get_provider
 from backend.services.deployment.base import DeployConfig, DeployContext
 from backend.services.deployment.capabilities import (
@@ -149,7 +149,7 @@ async def deployment_logs(deployment_id: int, user: User = Depends(current_user)
             provider_error = str(exc)
     return {
         "hub_events": [
-            {"ts": e.ts.isoformat(), "level": e.level, "message": e.message, "source": "clouddeploy-hub"}
+            {"ts": iso(e.ts), "level": e.level, "message": e.message, "source": "clouddeploy-hub"}
             for e in dep.events
         ],
         "provider_logs": provider_logs,

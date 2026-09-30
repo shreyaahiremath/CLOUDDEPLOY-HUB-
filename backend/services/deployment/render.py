@@ -27,6 +27,7 @@ from backend.services.deployment.base import (
 )
 from backend.services.docker import generate_dockerfile
 from backend.services.http import DEFAULT_TIMEOUT, ApiError, request
+from backend.services.supabase_store import as_utc
 
 API = "https://api.render.com/v1"
 
@@ -267,7 +268,7 @@ class RenderProvider(DeploymentProvider):
         params: list[tuple[str, str]] = [
             ("ownerId", owner_id), ("resource", deployment.provider_resource_id),
             ("limit", "100"), ("direction", "backward"),
-            ("startTime", deployment.created_at.isoformat()),
+            ("startTime", as_utc(deployment.created_at).isoformat()),
         ]
         async with self._client() as client:
             resp = await request(client, "Render", "GET", "/logs", params=params)

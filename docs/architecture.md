@@ -39,7 +39,8 @@
 | Docker service | `backend/services/docker/` | Dockerfile validation and generation |
 | Providers | `backend/services/deployment/` | `DeploymentProvider` implementations + capability catalog |
 | Worker | `backend/workers/deployment_worker.py` | Async orchestration: submit → poll → health check → record |
-| Database | Supabase Postgres / SQLite | Users, sessions, projects, sources, deployments, events, connections |
+| Database | Supabase (HTTPS API + Storage), SQLite working copy | Users, sessions, projects, deployments, events, connections; upload zips in Storage |
+| Supabase sync | `backend/services/supabase_store.py` | Loads all tables at startup; mirrors every committed insert/update/delete back to Supabase |
 
 ## Provider abstraction
 
@@ -93,3 +94,4 @@ public_url, created_at, updated_at, error_message, …), `deployment_events`, `p
 - Uploaded code is never executed by CloudDeploy Hub; builds run on the provider or in the user's
   own GitHub Actions.
 - Every query is scoped to the signed-in user.
+- Supabase tables have Row Level Security enabled with no public policies; only the backend's secret key can read or write them.

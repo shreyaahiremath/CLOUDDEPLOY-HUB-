@@ -11,6 +11,7 @@ from backend.services.auth import current_user
 from backend.schemas import deployment_out, iso
 from backend.services.deployment import all_providers
 from backend.services.deployment.capabilities import CATALOG, FREE_PLAN_NOTICE
+from backend.services import supabase_store
 from backend.services.github import get_connection
 
 router = APIRouter(prefix="/api", tags=["system"])
@@ -29,7 +30,8 @@ DOCS = {
 
 @router.get("/health")
 def health() -> dict:
-    return {"status": "ok", "service": "clouddeploy-hub"}
+    db_status = supabase_store.store.status()
+    return {"status": "ok" if db_status["ok"] else "degraded", "service": "clouddeploy-hub", **db_status}
 
 
 @router.get("/stats")
@@ -88,12 +90,13 @@ def get_settings(user: User = Depends(current_user)) -> dict:
         "github_server_token": bool(settings.github_token and settings.dev_login),
         "google_configured": settings.google_configured,
         "dev_login": settings.dev_login,
-        "database": "Supabase Postgres" if settings.database_url else "SQLite (local)",
+        "database": supabase_store.store.status(),
         "env": {
             name: bool(value) for name, value in {
                 "GOOGLE_CLIENT_ID": settings.google_client_id,
                 "GOOGLE_CLIENT_SECRET": settings.google_client_secret,
-                "DATABASE_URL": settings.database_url,
+                "SUPABASE_URL": settings.supabase_url,
+                "SUPABASE_SECRET_KEY": settings.supabase_secret_key,
                 "GITHUB_CLIENT_ID": settings.github_client_id,
                 "GITHUB_CLIENT_SECRET": settings.github_client_secret,
                 "GITHUB_TOKEN": settings.github_token,

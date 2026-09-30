@@ -7,4 +7,3 @@ python-dotenv>=1.0
 python-multipart>=0.0.9
 cryptography>=43
 pynacl>=1.5
-psycopg[binary]>=3.2

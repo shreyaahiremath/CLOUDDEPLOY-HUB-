@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.0 (2026-09-30)
+
+- Database: Supabase is now used through its HTTPS API (project URL + secret key) instead of a Postgres
+  connection string. No database password, no `DATABASE_URL`, no Postgres driver.
+- Uploaded project zips are stored in a private Supabase Storage bucket.
+- `/api/health` and the Settings page report the database connection state and any problem in plain words.
+- Timestamps sent to the browser are always UTC-aware.
+- Deploy wiring: `frontend/.env.production`, root `requirements.txt`, GitHub Actions CI.
+
 ## 1.0.0 (2026-09-30)
 
 Initial release of CloudDeploy Hub, the Unified Multi-Cloud Application Deployment Framework.

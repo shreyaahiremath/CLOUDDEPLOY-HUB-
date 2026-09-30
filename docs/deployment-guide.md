@@ -7,12 +7,19 @@ Vercel), and (2) deploying *your* applications with it.
 
 ### 1. Supabase (database)
 
+CloudDeploy Hub uses Supabase through its HTTPS API. There is no Postgres connection string and no
+database password to manage.
+
 1. Create a project at [supabase.com](https://supabase.com).
-2. **Connect** → copy the **Transaction pooler** connection string (port `6543`), e.g.
-   `postgresql://postgres.<ref>:<password>@aws-0-<region>.pooler.supabase.com:6543/postgres`.
-3. That's all. Tables are created automatically on the backend's first start. CloudDeploy Hub switches
-   the URL to the `psycopg` driver, adds `sslmode=require` and disables prepared statements, which the
-   transaction pooler requires.
+2. **SQL Editor → New query**: paste the whole of `supabase/schema.sql` and **Run**. It creates the
+   9 tables and locks them away from the public (publishable) key with Row Level Security.
+3. **Project Settings → API Keys**: copy the **Project URL** and the **Secret key** (`sb_secret_...`).
+   Do not use the publishable key: it is public and cannot protect user data.
+
+How it works: the backend keeps a working copy in a local SQLite file. On startup it loads every
+table from Supabase, and every committed change is written back. Uploaded projects are stored as zips
+in a private Supabase Storage bucket (`project-sources`). A Render restart therefore loses nothing.
+`GET /api/health` reports `"database": "Supabase"` when the connection works.
 
 ### 2. Render (backend API)
 
@@ -22,7 +29,8 @@ Vercel), and (2) deploying *your* applications with it.
 
 | Variable | Value |
 |---|---|
-| `DATABASE_URL` | Supabase transaction pooler URI |
+| `SUPABASE_URL` | `https://<project-ref>.supabase.co` |
+| `SUPABASE_SECRET_KEY` | Supabase secret key (`sb_secret_...`) |
 | `FRONTEND_URL` | Your Vercel URL, e.g. `https://clouddeploy-hub.vercel.app` |
 | `BACKEND_URL` | This service's URL, e.g. `https://clouddeploy-hub-api.onrender.com` |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | From Google Cloud (step 4) |

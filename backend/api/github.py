@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 from backend.config import settings
 from backend.database import get_db
 from backend.models import GitHubConnection, OAuthState, User
-from backend.schemas import UsernameIn
+from backend.schemas import UsernameIn, iso
 from backend.services.github import (
     GitHubClient,
     authorize_url,
@@ -51,7 +51,7 @@ def _status(conn: GitHubConnection | None) -> dict:
         "avatar_url": conn.avatar_url if conn else None,
         "auth_method": conn.auth_method if connected else None,
         "scopes": (conn.scopes or "").split(",") if connected and conn.scopes else [],
-        "connected_at": conn.connected_at.isoformat() if connected and conn.connected_at else None,
+        "connected_at": iso(conn.connected_at) if connected else None,
         "mismatch": mismatch,
         "mismatch_message": (
             f"You entered @{entered}, but GitHub authenticated @{verified}. Repositories will belong to @{verified}."
@@ -91,7 +91,8 @@ def oauth_start(user: User = Depends(current_user), db: Session = Depends(get_db
             400, "GitHub OAuth is not configured. Set GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET in backend/.env."
         )
     cutoff = datetime.now(timezone.utc) - timedelta(minutes=15)
-    db.query(OAuthState).filter(OAuthState.created_at < cutoff).delete()
+    for stale in db.query(OAuthState).filter(OAuthState.created_at < cutoff).all():
+        db.delete(stale)
     state = new_state()
     db.add(OAuthState(state=state, purpose="github", user_id=user.id))
     db.commit()

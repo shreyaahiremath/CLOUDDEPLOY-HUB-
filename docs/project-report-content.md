@@ -64,8 +64,8 @@ UI with dark mode and keyboard access; resumable deployments after restart.
 **Software:** Python 3.12, Node 20, modern browser. **Hardware:** none beyond a client device.
 
 ## 11. Technology Stack
-FastAPI, SQLAlchemy 2.0, Pydantic, httpx, PyNaCl, cryptography (Fernet), psycopg 3; React 19, Vite,
-TypeScript, React Router; Supabase Postgres; GitHub Actions; pytest + respx.
+FastAPI, SQLAlchemy 2.0, Pydantic, httpx, PyNaCl, cryptography (Fernet), Supabase REST + Storage APIs; React 19, Vite,
+TypeScript, React Router; Supabase (database and file storage); GitHub Actions; pytest + respx.
 
 ## 12. GitHub Integration
 Username field (identity only) with existence check; OAuth authorization-code flow with single-use
@@ -116,13 +116,15 @@ executables); zip-bomb guard; no execution of user code; per-user query scoping;
 the frontend.
 
 ## 22. Testing
-Automated (pytest, 47 tests, all passing at the time of writing):
+Automated (pytest, 54 tests, all passing at the time of writing):
 - Project: upload (folder and zip), validation, path traversal, secret detection, size limits, analyzer
   across frameworks, Docker detection/generation, restore after disk wipe.
 - GitHub: username rules, existence check, OAuth flow (state, encryption, mismatch, replay), repositories,
   branches, repository selection.
 - Auth: Google sign-in flow, unverified email rejection, logout, per-user isolation.
 - Providers: request/response contract tests for all five providers (mocked HTTP).
+- Supabase: startup load, write-back on commit, mirrored deletes, rollback, publishable-key refusal,
+  missing-table message, upload restore from Storage.
 - Deployment: success only after health check, unreachable → failed, provider failure with log tail,
   not-configured and incompatible blocking, logs endpoint, destroy.
 

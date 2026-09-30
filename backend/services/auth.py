@@ -83,15 +83,18 @@ def _hash(token: str) -> str:
 def create_session(db: Session, user: User) -> str:
     token = secrets.token_urlsafe(32)
     now = datetime.now(timezone.utc)
-    db.query(AuthSession).filter(AuthSession.expires_at < now).delete()
+    for expired in db.query(AuthSession).filter(AuthSession.expires_at < now).all():
+        db.delete(expired)
     db.add(AuthSession(token_hash=_hash(token), user_id=user.id, expires_at=now + timedelta(days=settings.session_days)))
     db.commit()
     return token
 
 
 def revoke_session(db: Session, token: str) -> None:
-    db.query(AuthSession).filter(AuthSession.token_hash == _hash(token)).delete()
-    db.commit()
+    session = db.get(AuthSession, _hash(token))
+    if session is not None:
+        db.delete(session)
+        db.commit()
 
 
 def _bearer(authorization: str | None) -> str | None:

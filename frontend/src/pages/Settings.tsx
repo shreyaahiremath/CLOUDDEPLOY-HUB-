@@ -6,7 +6,8 @@ import { useApi } from "../hooks";
 
 interface SettingsData {
   backend_url: string; frontend_url: string; github_oauth_configured: boolean; github_callback_url: string;
-  github_server_token: boolean; google_configured: boolean; dev_login: boolean; database: string;
+  github_server_token: boolean; google_configured: boolean; dev_login: boolean;
+  database: { database: string; ok: boolean; detail: string | null };
   env: Record<string, boolean>; limits: { max_upload_mb: number; max_file_mb: number; max_files: number };
 }
 
@@ -40,12 +41,13 @@ export function Settings() {
               </table>
             </div>
             <dl className="kv">
-              <dt>Database</dt><dd>{data.database}</dd>
+              <dt>Database</dt><dd>{data.database.database}{data.database.ok ? "" : " (problem)"}</dd>
               <dt>Backend URL</dt><dd className="mono">{data.backend_url}</dd>
               <dt>Frontend URL</dt><dd className="mono">{data.frontend_url}</dd>
               <dt>GitHub OAuth callback</dt><dd className="row"><span className="mono">{data.github_callback_url}</span><CopyButton text={data.github_callback_url} /></dd>
               <dt>Upload limits</dt><dd>{data.limits.max_upload_mb} MB per project · {data.limits.max_file_mb} MB per file · {data.limits.max_files} files</dd>
             </dl>
+            {data.database.detail && <Alert tone="danger" title="Database problem">{data.database.detail}</Alert>}
             {data.dev_login && <Alert tone="warning">DEV_LOGIN is enabled. Turn it off before exposing this backend publicly.</Alert>}
           </section>
         </>

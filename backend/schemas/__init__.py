@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import re
+from datetime import timezone
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -82,7 +83,9 @@ class DeployIn(BaseModel):
 
 
 def iso(dt) -> str | None:
-    return dt.isoformat() if dt else None
+    if not dt:
+        return None
+    return (dt.replace(tzinfo=timezone.utc) if dt.tzinfo is None else dt).isoformat()
 
 
 def project_out(p: Project, *, detail: bool = False) -> dict:

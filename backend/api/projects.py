@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import asyncio
 import json
 from pathlib import Path
+
+import httpx
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
@@ -10,7 +13,7 @@ from backend.database import get_db
 from backend.models import DeploymentStatus, Project, ProjectSource, User
 from backend.services.auth import current_user
 from backend.schemas import GitHubProjectIn, ProjectUpdateIn, PublishIn, project_out
-from backend.services import workspace
+from backend.services import supabase_store, workspace
 from backend.services.deployment import get_provider
 from backend.services.deployment.capabilities import CATALOG, evaluate_all
 from backend.services.github import client_for, get_connection, get_token
@@ -112,6 +115,13 @@ async def upload_project(request: Request, user: User = Depends(current_user), d
     archive = workspace.make_zip(files)
     db.add(ProjectSource(project_id=project.id, archive=archive, size_bytes=len(archive)))
     try:
+        await asyncio.to_thread(supabase_store.store.put_source, project.id, archive)
+    except httpx.HTTPError as exc:
+        db.rollback()
+        db.delete(project)
+        db.commit()
+        raise HTTPException(502, f"Could not save the upload to Supabase Storage: {exc.__class__.__name__}") from exc
+    try:
         project.workspace_path = str(workspace.write_workspace(project.id, files))
     except workspace.WorkspaceError as exc:
         db.delete(project)
@@ -182,7 +192,7 @@ def delete_project(project_id: int, user: User = Depends(current_user), db: Sess
         raise HTTPException(
             409, f"This project has {len(live)} deployment(s) that still exist on providers. Destroy them first."
         )
-    workspace.delete_workspace(project.id)
+    workspace.delete_workspace(project.id, stored_copy=True)
     db.delete(project)
     db.commit()
 

@@ -1,6 +1,6 @@
 -- CloudDeploy Hub: complete Supabase schema.
 -- Supabase → SQL Editor → New query → paste this whole file → Run. Safe to run more than once.
--- The backend also creates missing tables on startup; this file lets you create them up front.
+-- Required: the backend uses Supabase's HTTPS API, which cannot create tables by itself.
 
 begin;
 
@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS deployment_events (
 );
 
 -- Lock every table away from Supabase's public REST API (anon / publishable key).
--- The backend connects as the postgres role, which bypasses RLS, so it keeps full access.
+-- The backend uses the secret key (service role), which bypasses RLS, so it keeps full access.
 alter table public.provider_verifications enable row level security;
 revoke all on table public.provider_verifications from anon, authenticated;
 alter table public.users enable row level security;

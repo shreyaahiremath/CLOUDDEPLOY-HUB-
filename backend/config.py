@@ -20,7 +20,11 @@ def _env(name: str, default: str = "") -> str:
 @dataclass(frozen=True)
 class Settings:
     data_dir: Path = field(default_factory=lambda: Path(_env("CDH_DATA_DIR") or BACKEND_DIR / "data"))
-    database_url: str = field(default_factory=lambda: _env("DATABASE_URL"))
+    # Supabase project (durable storage through its HTTPS API; no database password needed)
+    supabase_url: str = field(default_factory=lambda: _env("SUPABASE_URL"))
+    supabase_secret_key: str = field(
+        default_factory=lambda: _env("SUPABASE_SECRET_KEY") or _env("SUPABASE_SERVICE_ROLE_KEY")
+    )
     frontend_url: str = field(default_factory=lambda: _env("FRONTEND_URL", "http://localhost:5173"))
     backend_url: str = field(default_factory=lambda: _env("BACKEND_URL", "http://localhost:8000"))
     secret_key: str = field(default_factory=lambda: _env("SECRET_KEY"))

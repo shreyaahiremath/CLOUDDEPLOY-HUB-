@@ -2,6 +2,8 @@
 
 | Symptom | Cause | Fix |
 |---|---|---|
+| `/api/health` says `Supabase (NOT connected)` | Wrong key, or tables missing | Use the **secret** key (`sb_secret_...`) in `SUPABASE_SECRET_KEY`; run `supabase/schema.sql` in the SQL Editor; restart |
+| Data disappears after the backend sleeps | Supabase not configured, so only the temporary SQLite file is used | Set `SUPABASE_URL` and `SUPABASE_SECRET_KEY` on Render |
 | **Provider Not Configured** | Token env var missing on the backend | Add it on Render (or `backend/.env`) and restart |
 | "Google sign-in isn't configured" | `GOOGLE_CLIENT_ID/SECRET` missing | Create a Google OAuth client; redirect URI `{BACKEND_URL}/api/auth/google/callback` |
 | Google says `redirect_uri_mismatch` | `BACKEND_URL` differs from the URI registered in Google | Make them identical, including `https://` and no trailing slash |
@@ -20,5 +22,5 @@
 | GitHub Pages: blank page, 404 assets | Wrong base path | Vite/CRA are handled automatically; other tools need a `/<repo>/` base |
 | Cloudflare: 403 from API | Token lacks Pages permission / wrong account ID | Create a token with *Cloudflare Pages: Edit* |
 | Actions run not found | Workflow registered slowly after commit | Select Try Again; CloudDeploy Hub retries dispatch automatically |
-| "The uploaded files are no longer available" | Project uploaded before DB-backed sources existed | Upload the project again |
+| "The uploaded files are no longer available" | Project uploaded while Supabase was not connected | Upload the project again |
 | Upload rejected: "Possible GitHub token on line N" | A secret is committed in your code | Remove it, use an environment variable, and rotate the secret |
