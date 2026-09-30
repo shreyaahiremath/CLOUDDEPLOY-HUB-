@@ -1,0 +1,42 @@
+# Render Blueprint for the CloudDeploy Hub API (FastAPI). New → Blueprint → select this repository.
+# Values marked sync: false are entered in the Render dashboard; they are never committed.
+services:
+  - type: web
+    name: clouddeploy-hub-api
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: SECRET_KEY            # encrypts stored GitHub tokens; must stay stable across restarts
+        generateValue: true
+      - key: DATABASE_URL          # Supabase → Connect → Transaction pooler URI
+        sync: false
+      - key: FRONTEND_URL          # e.g. https://clouddeploy-hub.vercel.app
+        sync: false
+      - key: BACKEND_URL           # e.g. https://clouddeploy-hub-api.onrender.com
+        sync: false
+      - key: CORS_ORIGIN_REGEX     # optional, e.g. ^https://clouddeploy-hub-[a-z0-9-]+\.vercel\.app$
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GITHUB_CLIENT_ID
+        sync: false
+      - key: GITHUB_CLIENT_SECRET
+        sync: false
+      - key: RENDER_API_KEY
+        sync: false
+      - key: VERCEL_TOKEN
+        sync: false
+      - key: NETLIFY_AUTH_TOKEN
+        sync: false
+      - key: CLOUDFLARE_API_TOKEN
+        sync: false
+      - key: CLOUDFLARE_ACCOUNT_ID
+        sync: false
