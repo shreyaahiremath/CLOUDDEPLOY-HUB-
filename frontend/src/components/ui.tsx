@@ -2,18 +2,19 @@ import { useState, type ReactNode } from "react";
 import { ACTIVE, type Deployment, type Status } from "../api";
 import { IconAlert, IconCheck, IconInfo, IconX } from "./icons";
 
-export const PROVIDER_META: Record<string, { name: string; mono: string; color: string }> = {
-  render: { name: "Render", mono: "Rd", color: "#4b5563" },
-  vercel: { name: "Vercel", mono: "Vc", color: "#1f2937" },
-  netlify: { name: "Netlify", mono: "Nf", color: "#0f766e" },
-  github_pages: { name: "GitHub Pages", mono: "GP", color: "#6d28d9" },
-  cloudflare_pages: { name: "Cloudflare Pages", mono: "CF", color: "#c2410c" },
+// Tonal container + on-container pairs (Material 3), one hue per platform.
+export const PROVIDER_META: Record<string, { name: string; mono: string; color: string; on: string }> = {
+  render: { name: "Render", mono: "Rd", color: "#3b4a63", on: "#d7e3ff" },
+  vercel: { name: "Vercel", mono: "Vc", color: "#4a4458", on: "#e8def8" },
+  netlify: { name: "Netlify", mono: "Nf", color: "#1f4e4a", on: "#a6f2e8" },
+  github_pages: { name: "GitHub Pages", mono: "GP", color: "#4f378b", on: "#eaddff" },
+  cloudflare_pages: { name: "Cloudflare Pages", mono: "CF", color: "#6b3a12", on: "#ffdcc2" },
 };
 
 export function ProviderMark({ provider, size = 40 }: { provider: string; size?: number }) {
-  const meta = PROVIDER_META[provider] ?? { mono: "?", color: "#6b7280" };
+  const meta = PROVIDER_META[provider] ?? { mono: "?", color: "#36343b", on: "#e6e0e9" };
   return (
-    <span className="monogram" style={{ background: meta.color, width: size, height: size, fontSize: size * 0.38 }} aria-hidden="true">
+    <span className="monogram" style={{ background: meta.color, color: meta.on, width: size, height: size, fontSize: size * 0.38 }} aria-hidden="true">
       {meta.mono}
     </span>
   );

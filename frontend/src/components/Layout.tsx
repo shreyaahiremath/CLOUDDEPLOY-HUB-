@@ -2,7 +2,7 @@ import { useEffect, useState, type ComponentType } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../auth";
 import {
-  IconBook, IconCloud, IconFolder, IconGit, IconHelp, IconHistory, IconHome, IconLogout, IconMap, IconMenu, IconMoon,
+  IconBook, IconCloud, IconFolder, IconGit, IconHelp, IconHistory, IconHome, IconLogout, IconMap, IconMenu,
   IconPlus, IconSettings,
 } from "./icons";
 
@@ -29,25 +29,16 @@ const GROUPS: { label: string; items: Item[] }[] = [
 export function Logo() {
   return (
     <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
-      <rect width="32" height="32" rx="8" fill="var(--primary)" />
-      <circle cx="9" cy="16" r="3" fill="#fff" /><circle cx="23" cy="9" r="2.5" fill="#fff" /><circle cx="23" cy="23" r="2.5" fill="#f2a93b" />
-      <path d="M11.5 15 20.6 10M11.5 17l9.1 5" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+      <rect width="32" height="32" rx="10" fill="#4f378b" />
+      <circle cx="9" cy="16" r="3" fill="#eaddff" /><circle cx="23" cy="9" r="2.5" fill="#eaddff" /><circle cx="23" cy="23" r="2.5" fill="#efb8c8" />
+      <path d="M11.5 15 20.6 10M11.5 17l9.1 5" stroke="#eaddff" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
-}
-
-function cycleTheme() {
-  const root = document.documentElement;
-  const next = root.dataset.theme === "dark" ? "light" : root.dataset.theme === "light" ? "" : "dark";
-  if (next) root.dataset.theme = next; else delete root.dataset.theme;
-  try { next ? localStorage.setItem("cdh_theme", next) : localStorage.removeItem("cdh_theme"); } catch { /* ignore */ }
-  return next || "system";
 }
 
 export function Layout() {
   const { user, signOut } = useAuth();
   const [open, setOpen] = useState(false);
-  const [theme, setTheme] = useState<string>(() => document.documentElement.dataset.theme || "system");
   const location = useLocation();
   useEffect(() => setOpen(false), [location.pathname]);
   useEffect(() => {
@@ -76,9 +67,6 @@ export function Layout() {
           </nav>
         ))}
         <div className="sidebar-foot">
-          <button className="btn ghost sm" style={{ justifyContent: "flex-start" }} onClick={() => setTheme(cycleTheme())} aria-label={`Theme: ${theme}. Change theme`}>
-            <IconMoon size={16} />Theme: {theme}
-          </button>
           {user && (
             <div className="user-chip">
               {user.avatar_url ? <img src={user.avatar_url} alt="" referrerPolicy="no-referrer" /> : <span className="avatar" />}
