@@ -11,6 +11,12 @@ from backend.config import settings
 
 def normalize_url(url: str) -> str:
     """Accept the connection string exactly as Supabase shows it and pick the psycopg 3 driver."""
+    placeholders = ("PUT-", "[YOUR-PASSWORD]", "<db-password>", "<region>")
+    if any(p in url for p in placeholders):
+        raise RuntimeError(
+            "DATABASE_URL still contains a placeholder. Set it to the Supabase Transaction pooler URI "
+            "(Supabase > Connect > Transaction pooler, port 6543) with your database password filled in."
+        )
     for prefix in ("postgres://", "postgresql://"):
         if url.startswith(prefix):
             url = "postgresql+psycopg://" + url[len(prefix):]
