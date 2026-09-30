@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { BrowserRouter, Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "./auth";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import { Layout } from "./components/Layout";
 import { AddProject } from "./pages/AddProject";
 import { Architecture } from "./pages/Architecture";
@@ -30,7 +31,7 @@ function NotFound() {
     <div className="page">
       <div className="card empty">
         <h3>Page not found</h3>
-        <p>That address doesn't match any page in CloudDeploy Hub.</p>
+        <p>That address doesn't match any page in Git2Live.</p>
         <Link className="btn primary" to="/">Go to Dashboard</Link>
       </div>
     </div>
@@ -39,6 +40,7 @@ function NotFound() {
 
 export function App() {
   return (
+    <ErrorBoundary>
     <BrowserRouter>
       <AuthProvider>
         <Routes>
@@ -65,5 +67,6 @@ export function App() {
         </Routes>
       </AuthProvider>
     </BrowserRouter>
+    </ErrorBoundary>
   );
 }

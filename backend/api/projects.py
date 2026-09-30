@@ -23,7 +23,7 @@ from backend.services.workspace.validation import strip_common_root
 
 router = APIRouter(prefix="/api/projects", tags=["projects"])
 
-GITIGNORE = """# Added by CloudDeploy Hub
+GITIGNORE = """# Added by Git2Live
 .env
 .env.*
 !.env.example
@@ -251,9 +251,9 @@ async def publish(project_id: int, body: PublishIn, user: User = Depends(current
     files, _ = _publish_files(db, project)
     try:
         async with client_for(db, user.id) as gh:
-            repo = await gh.create_repo(body.repo_name, private=body.private, description=f"{project.name} (published with CloudDeploy Hub)")
+            repo = await gh.create_repo(body.repo_name, private=body.private, description=f"{project.name} (published with Git2Live)")
             branch = repo.get("default_branch") or "main"
-            sha = await gh.push_files(repo["owner"]["login"], repo["name"], branch, files, "Initial commit from CloudDeploy Hub")
+            sha = await gh.push_files(repo["owner"]["login"], repo["name"], branch, files, "Initial commit from Git2Live")
     except ApiError as exc:
         msg = exc.message
         if exc.status == 422 and "name already exists" in str(exc.body).lower():

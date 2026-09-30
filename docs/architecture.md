@@ -1,7 +1,7 @@
 # Architecture
 
 ```text
-                    CloudDeploy Hub
+                    Git2Live
                            │
              ┌─────────────┴─────────────┐
              │                           │
@@ -91,7 +91,7 @@ public_url, created_at, updated_at, error_message, …), `deployment_events`, `p
 - GitHub OAuth tokens and deployment environment-variable values are encrypted at rest (`SECRET_KEY`).
 - Session tokens are random 256-bit values; only their hash is stored; they travel in a URL fragment
   once, then as an `Authorization` header.
-- Uploaded code is never executed by CloudDeploy Hub; builds run on the provider or in the user's
+- Uploaded code is never executed by Git2Live; builds run on the provider or in the user's
   own GitHub Actions.
 - Every query is scoped to the signed-in user.
 - Supabase tables have Row Level Security enabled with no public policies; only the backend's secret key can read or write them.

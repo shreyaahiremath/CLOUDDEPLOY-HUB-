@@ -17,6 +17,8 @@ from backend.services import supabase_store
 from backend.services.github import get_connection
 from backend.services.supabase_store import as_utc
 
+APP_VERSION = "1.2.1"
+
 router = APIRouter(prefix="/api", tags=["system"])
 
 DOCS = {
@@ -34,7 +36,7 @@ DOCS = {
 @router.get("/health")
 def health() -> dict:
     db_status = supabase_store.store.status()
-    return {"status": "ok" if db_status["ok"] else "degraded", "service": "clouddeploy-hub", **db_status}
+    return {"status": "ok" if db_status["ok"] else "degraded", "service": "git2live", "version": APP_VERSION, **db_status}
 
 
 @router.get("/stats")

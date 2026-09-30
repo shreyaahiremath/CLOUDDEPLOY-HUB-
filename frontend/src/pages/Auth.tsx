@@ -36,10 +36,10 @@ export function Login() {
   return (
     <div className="login">
       <section className="login-art" aria-hidden="true">
-        <div className="brand" style={{ color: "inherit", padding: 0 }}><Logo size={40} />CloudDeploy Hub</div>
+        <div className="brand" style={{ color: "inherit", padding: 0 }}><Logo size={40} />Git2Live</div>
         <div className="stack lg">
           <h1>One project. Five free clouds. Real URLs.</h1>
-          <p>Bring your own app from GitHub or your laptop. CloudDeploy Hub analyzes it, shows which free platforms can actually run it, deploys it through each provider's official API, and checks that the live URL answers.</p>
+          <p>Bring your own app from GitHub or your laptop. Git2Live analyzes it, shows which free platforms can actually run it, deploys it through each provider's official API, and checks that the live URL answers.</p>
         </div>
         <HubOrbit />
       </section>
@@ -65,7 +65,7 @@ export function Login() {
               )}
             </>
           )}
-          <p className="subtle">CloudDeploy Hub never asks for your GitHub or Google password.</p>
+          <p className="subtle">Git2Live never asks for your GitHub or Google password.</p>
         </div>
       </section>
     </div>

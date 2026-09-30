@@ -67,7 +67,7 @@ CATALOG: dict[str, ProviderCapability] = {
         env_vars=("VERCEL_TOKEN",),
         docs_url="https://vercel.com/docs/plans/hobby",
         pricing_url="https://vercel.com/pricing",
-        build_strategy="CloudDeploy Hub uploads the source files to Vercel through its API and Vercel builds them.",
+        build_strategy="Git2Live uploads the source files to Vercel through its API and Vercel builds them.",
     ),
     "netlify": ProviderCapability(
         key="netlify",
@@ -84,7 +84,7 @@ CATALOG: dict[str, ProviderCapability] = {
         env_vars=("NETLIFY_AUTH_TOKEN",),
         docs_url="https://docs.netlify.com/api-and-cli-guides/api-guides/get-started-with-api/",
         pricing_url="https://www.netlify.com/pricing/",
-        build_strategy="CloudDeploy Hub uploads a source zip to Netlify's Build API and Netlify builds it.",
+        build_strategy="Git2Live uploads a source zip to Netlify's Build API and Netlify builds it.",
     ),
     "github_pages": ProviderCapability(
         key="github_pages",
@@ -102,7 +102,7 @@ CATALOG: dict[str, ProviderCapability] = {
         env_vars=(),
         docs_url="https://docs.github.com/en/pages",
         pricing_url="https://github.com/pricing",
-        build_strategy="CloudDeploy Hub adds a GitHub Actions workflow that builds the site and publishes it to Pages.",
+        build_strategy="Git2Live adds a GitHub Actions workflow that builds the site and publishes it to Pages.",
     ),
     "cloudflare_pages": ProviderCapability(
         key="cloudflare_pages",

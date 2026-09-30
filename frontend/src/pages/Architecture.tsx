@@ -1,7 +1,7 @@
 import { HubOrbit } from "../components/charts";
 import { PageHead } from "../components/ui";
 
-const DIAGRAM = String.raw`                    CloudDeploy Hub
+const DIAGRAM = String.raw`                    Git2Live
                            │
              ┌─────────────┴─────────────┐
              │                           │

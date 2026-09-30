@@ -154,7 +154,7 @@ class Deployment(Base):
 
 
 class DeploymentEvent(Base):
-    """Orchestration events emitted by CloudDeploy Hub itself (e.g. "Created Render service").
+    """Orchestration events emitted by Git2Live itself (e.g. "Created Render service").
     Provider build logs are never stored here; they are fetched live from the provider."""
 
     __tablename__ = "deployment_events"

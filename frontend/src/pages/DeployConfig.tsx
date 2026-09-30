@@ -98,7 +98,7 @@ export function DeployConfig() {
                   </div>
                 ))}
                 <button className="btn sm" onClick={() => setEnv([...env, { key: "", value: "" }])}>Add variable</button>
-                <span className="hint">Sent directly to the provider. CloudDeploy Hub stores them with the deployment's configuration.</span>
+                <span className="hint">Sent directly to the provider. Git2Live stores them with the deployment's configuration.</span>
               </div>
             </details>
           )}

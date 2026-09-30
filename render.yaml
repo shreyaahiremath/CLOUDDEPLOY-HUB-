@@ -1,4 +1,4 @@
-# Render Blueprint for the CloudDeploy Hub API (FastAPI). New → Blueprint → select this repository.
+# Render Blueprint for the Git2Live API (FastAPI). New → Blueprint → select this repository.
 # Values marked sync: false are entered in the Render dashboard; they are never committed.
 services:
   - type: web

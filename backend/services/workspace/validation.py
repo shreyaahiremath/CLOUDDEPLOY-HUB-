@@ -1,6 +1,6 @@
 """Validation for user-supplied project files.
 
-CloudDeploy Hub never executes uploaded code locally. Builds always run on the provider (or in the
+Git2Live never executes uploaded code locally. Builds always run on the provider (or in the
 user's own GitHub Actions). This module only decides which files are safe to keep and publish.
 """
 from __future__ import annotations

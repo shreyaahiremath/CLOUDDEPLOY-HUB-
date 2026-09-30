@@ -1,4 +1,4 @@
-// CloudDeploy Hub mark: a Material "cookie" shape (slowly rotating) holding a hub that fans out
+// Git2Live mark: a Material "cookie" shape (slowly rotating) holding a hub that fans out
 // to three destinations. Colours come from the active dynamic-colour scheme.
 
 /** Scalloped Material shape as an SVG path. */

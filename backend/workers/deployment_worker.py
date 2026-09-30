@@ -76,7 +76,7 @@ def resume_active() -> None:
             elif dep.provider_resource_id or dep.deployment_id:
                 _spawn(dep.id, watch(dep.id))
             else:
-                _fail(db, dep, "CloudDeploy Hub restarted before the deployment was submitted to the provider.",
+                _fail(db, dep, "Git2Live restarted before the deployment was submitted to the provider.",
                       "Click Try Again to submit it again.")
 
 

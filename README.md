@@ -1,13 +1,13 @@
-# CloudDeploy Hub
+# Git2Live
 
 **Unified Multi-Cloud Application Deployment Framework** (college Minor Project)
 
-CloudDeploy Hub takes **your own application** (a GitHub repository or an uploaded project folder),
+Git2Live takes **your own application** (a GitHub repository or an uploaded project folder),
 analyzes it, shows which **free** cloud platforms can actually run it, deploys it through each
 provider's official API, and returns the **real public URL** only after that URL passes a health check.
 
 ```text
-MY PROJECT → CloudDeploy Hub → GitHub / Upload → Analyze → Select FREE PLATFORM
+MY PROJECT → Git2Live → GitHub / Upload → Analyze → Select FREE PLATFORM
 → Real Provider API → Real Build → Real Deployment → Real Public URL → Health Check → LIVE
 ```
 
@@ -16,7 +16,7 @@ If a provider has no credentials, the app says **Provider Not Configured**. It n
 
 ## Supported free platforms
 
-| Platform | Free option | Deploys | How CloudDeploy Hub deploys |
+| Platform | Free option | Deploys | How Git2Live deploys |
 |---|---|---|---|
 | Render | Free web service / static site | FastAPI, Flask, Django, Node, Docker, static | Render API: creates a service from your GitHub repo |
 | Vercel | Hobby | React/Vite, Next.js, static, serverless | Vercel API: uploads files and creates a production deployment |
@@ -80,7 +80,7 @@ cd frontend && npm install && npm run dev   # http://localhost:5173 (proxies /ap
 
 Run the tests: `backend/.venv/Scripts/python -m pytest backend/tests -q`
 
-## Deploy CloudDeploy Hub itself
+## Deploy Git2Live itself
 
 See [docs/deployment-guide.md](docs/deployment-guide.md): **Supabase** (database) → **Render**
 (backend, via `render.yaml`) → **Vercel** (frontend, root directory `frontend`) → Google and GitHub

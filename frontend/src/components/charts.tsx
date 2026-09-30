@@ -18,6 +18,7 @@ function smooth(points: [number, number][]): string {
 }
 
 export function AreaChart({ data }: { data: DayPoint[] }) {
+  if (data.length < 2) return <p className="subtle">The chart appears once the server sends deployment history.</p>;
   const max = Math.max(1, ...data.map((d) => d.total));
   const step = (W - PAD_X * 2) / Math.max(1, data.length - 1);
   const y = (v: number) => PAD_TOP + (1 - v / max) * (H - PAD_TOP - PAD_BOTTOM);
@@ -89,6 +90,7 @@ export function ProviderBars({ items }: { items: { provider: string; name: strin
   const max = Math.max(1, ...items.map((i) => i.total));
   const [grown, setGrown] = useState(false);
   useEffect(() => { const id = requestAnimationFrame(() => setGrown(true)); return () => cancelAnimationFrame(id); }, []);
+  if (items.length === 0) return <p className="subtle">No platform data yet.</p>;
   return (
     <div className="bars">
       {items.map((it) => (

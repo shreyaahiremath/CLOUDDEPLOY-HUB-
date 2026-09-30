@@ -93,14 +93,14 @@ export function GitHubPage() {
             )}
           </section>
           <section className="card stack">
-            <h2>What CloudDeploy Hub can do</h2>
+            <h2>What Git2Live can do</h2>
             <ul className="muted" style={{ margin: 0, paddingLeft: 20, lineHeight: 1.8 }}>
               <li>List your repositories and branches (including private ones).</li>
               <li>Create a repository and push an uploaded project (you review the file list first).</li>
               <li>Add a deployment workflow for GitHub Pages / Cloudflare Pages when you choose those platforms.</li>
             </ul>
             <Alert tone="info" title="Your credentials stay server-side">
-              The OAuth token is encrypted in the database and never sent to your browser. CloudDeploy Hub never asks for your GitHub password. Disconnecting revokes the token.
+              The OAuth token is encrypted in the database and never sent to your browser. Git2Live never asks for your GitHub password. Disconnecting revokes the token.
             </Alert>
           </section>
         </div>

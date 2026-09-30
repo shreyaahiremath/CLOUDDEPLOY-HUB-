@@ -17,7 +17,7 @@ export function Settings() {
   const { data, error, loading, reload } = useApi<SettingsData>("/api/settings");
   return (
     <div className="page">
-      <PageHead title="Settings" sub="Your account and how this CloudDeploy Hub instance is configured." />
+      <PageHead title="Settings" sub="Your account and how this Git2Live instance is configured." />
       <section className="card stack">
         <h2>Account</h2>
         <dl className="kv">

@@ -19,7 +19,7 @@ class HealthResult:
 
 async def check_once(url: str, paths: list[str], timeout: float = 60.0) -> HealthResult:
     last = HealthResult(False, "Not checked")
-    async with httpx.AsyncClient(timeout=timeout, follow_redirects=True, headers={"User-Agent": "CloudDeployHub-HealthCheck/1.0"}) as client:
+    async with httpx.AsyncClient(timeout=timeout, follow_redirects=True, headers={"User-Agent": "Git2Live-HealthCheck/1.0"}) as client:
         for path in paths:
             target = url.rstrip("/") + path
             try:

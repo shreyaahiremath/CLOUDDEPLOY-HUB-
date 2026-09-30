@@ -1,7 +1,7 @@
 # Provider Guide
 
 Each section covers what the free option runs, the credentials the backend needs, exactly what
-CloudDeploy Hub does, and where the URL, status and logs come from.
+Git2Live does, and where the URL, status and logs come from.
 
 ## Render
 
@@ -40,7 +40,7 @@ CloudDeploy Hub does, and where the URL, status and logs come from.
   builds the zip. If the project has no `netlify.toml`, one is generated (build command, publish dir,
   `NODE_VERSION=20`, SPA redirect) and shown in the preview.
 - **Status:** `GET /api/v1/deploys/{deploy_id}` `state` (`building` → `processing` → `ready` / `error`).
-- **Logs:** Netlify's public API does not expose raw build logs; CloudDeploy Hub shows the deploy
+- **Logs:** Netlify's public API does not expose raw build logs; Git2Live shows the deploy
   state, summary messages and error message, plus a link to the full log in Netlify.
 - **URL:** site `ssl_url`. **Destroy:** `DELETE /api/v1/sites/{id}`.
 

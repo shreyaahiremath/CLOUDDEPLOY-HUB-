@@ -14,7 +14,7 @@ export function Projects() {
       {loading && !data ? <div className="grid cols-3"><CardSkeleton /><CardSkeleton /><CardSkeleton /></div> :
         data && data.length === 0 ? (
           <Empty icon={<IconFolder />} title="No projects yet" action={<Link className="btn primary" to="/projects/new">Add your first project</Link>}>
-            Add a GitHub repository or upload a project folder. CloudDeploy Hub detects the framework and shows which free platforms can run it.
+            Add a GitHub repository or upload a project folder. Git2Live detects the framework and shows which free platforms can run it.
           </Empty>
         ) : (
           <div className="grid cols-3">

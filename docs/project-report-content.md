@@ -1,11 +1,11 @@
-# Unified Multi-Cloud Application Deployment Framework (CloudDeploy Hub)
+# Unified Multi-Cloud Application Deployment Framework (Git2Live)
 
 *Project report content. Sections 22–23 must be completed with results from real test runs; nothing
 here is invented.*
 
 ## 1. Abstract
 Deploying a web application requires learning each hosting provider's workflow, build settings and
-limits. CloudDeploy Hub is a web platform that accepts a user's own project (a GitHub repository or an
+limits. Git2Live is a web platform that accepts a user's own project (a GitHub repository or an
 uploaded folder), statically analyzes it, determines which free cloud platforms can run it, and
 deploys it through the official API of the selected platform: Render, Vercel, Netlify, GitHub Pages or
 Cloudflare Pages. The system reports real provider status and logs and marks a deployment successful
@@ -14,7 +14,7 @@ only after the provider-returned public URL passes an HTTP health check.
 ## 2. Introduction
 Students and small teams usually deploy on free tiers, but each provider differs in build model
 (native runtime, Docker, static build, serverless), source model (Git, file upload) and constraints.
-CloudDeploy Hub provides one consistent workflow over these differences while respecting what each
+Git2Live provides one consistent workflow over these differences while respecting what each
 platform actually supports.
 
 ## 3. Problem Statement
@@ -143,7 +143,7 @@ actually obtained.
 - Netlify's public API does not expose raw build logs.
 - Environment variables are passed to Render and Vercel only in this version.
 - SSR frameworks on Cloudflare Pages and Next.js base paths on GitHub Pages need manual adaptation.
-- Provider tokens are configured per CloudDeploy Hub instance (operator accounts), not per end user.
+- Provider tokens are configured per Git2Live instance (operator accounts), not per end user.
 
 ## 25. Future Scope
 Per-user provider tokens via each provider's OAuth; more free platforms (Fly.io, Koyeb, Railway trial);
@@ -151,6 +151,6 @@ custom domains; preview deployments per branch; webhooks instead of polling; cos
 from provider APIs; monorepo multi-service deploys.
 
 ## 26. Conclusion
-CloudDeploy Hub shows that one framework can drive heterogeneous free cloud platforms through their
+Git2Live shows that one framework can drive heterogeneous free cloud platforms through their
 native mechanisms while giving users a single, honest workflow: it deploys only where a project can
 run and reports success only when the application is actually reachable.

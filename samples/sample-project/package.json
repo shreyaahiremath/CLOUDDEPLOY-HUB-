@@ -2,5 +2,5 @@
   "name": "clouddeploy-sample-project",
   "version": "1.0.0",
   "private": true,
-  "description": "Static HTML integration-test project for CloudDeploy Hub (no build step)."
+  "description": "Static HTML integration-test project for Git2Live (no build step)."
 }

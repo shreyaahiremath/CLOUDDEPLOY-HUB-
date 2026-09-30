@@ -1,6 +1,6 @@
 # Project Status
 
-STATUS: CloudDeploy Hub 1.0.0 | DONE: backend, frontend, 5 provider integrations, Google + GitHub OAuth, Supabase support, tests, docs, deploy configs | IN PROGRESS: none | BLOCKED: real provider acceptance runs need provider accounts/tokens | NEXT: deploy the hub (Supabase → Render → Vercel), then run scripts/acceptance_test.py per provider and record the results in docs/project-report-content.md §22–23
+STATUS: Git2Live 1.0.0 | DONE: backend, frontend, 5 provider integrations, Google + GitHub OAuth, Supabase support, tests, docs, deploy configs | IN PROGRESS: none | BLOCKED: real provider acceptance runs need provider accounts/tokens | NEXT: deploy the hub (Supabase → Render → Vercel), then run scripts/acceptance_test.py per provider and record the results in docs/project-report-content.md §22–23
 
 | Provider | Code | Contract tests | Real end-to-end verified |
 |---|---|---|---|

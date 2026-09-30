@@ -73,7 +73,7 @@ export function AddProject() {
 
   return (
     <div className="page">
-      <PageHead title="Add Project" sub="Bring your own application. It is never mixed with sample code or CloudDeploy Hub itself." />
+      <PageHead title="Add Project" sub="Bring your own application. It is never mixed with sample code or Git2Live itself." />
       <div className="tabs" role="tablist">
         <button className="tab" role="tab" aria-selected={tab === "upload"} onClick={() => setTab("upload")}>Upload Project Folder</button>
         <button className="tab" role="tab" aria-selected={tab === "github"} onClick={() => setTab("github")}>Connect GitHub Repository</button>
@@ -131,7 +131,7 @@ export function AddProject() {
         <div className="card empty">
           <div className="empty-icon"><IconGit /></div>
           <h3>Connect GitHub first</h3>
-          <p>Authorize CloudDeploy Hub with GitHub to list your repositories. Your password is never requested or stored.</p>
+          <p>Authorize Git2Live with GitHub to list your repositories. Your password is never requested or stored.</p>
           <Link className="btn primary" to="/github">Go to GitHub Integration</Link>
         </div>
       )}

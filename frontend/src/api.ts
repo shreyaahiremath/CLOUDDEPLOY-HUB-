@@ -25,7 +25,7 @@ function messageFrom(data: unknown, status: number): string {
     if (Array.isArray(detail)) return detail.map((d) => (d as { msg?: string }).msg ?? String(d)).join(" ");
     if (detail && typeof detail === "object" && "message" in detail) return String((detail as { message: string }).message);
   }
-  if (status === 0) return "Could not reach the CloudDeploy Hub API. Check that the backend is running.";
+  if (status === 0) return "Could not reach the Git2Live API. Check that the backend is running.";
   return `Request failed (HTTP ${status}).`;
 }
 

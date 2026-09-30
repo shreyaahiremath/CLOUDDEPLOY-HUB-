@@ -25,7 +25,7 @@ Material You (Material 3 Expressive) redesign. No feature or route was removed.
 
 ## 1.0.0 (2026-09-30)
 
-Initial release of CloudDeploy Hub, the Unified Multi-Cloud Application Deployment Framework.
+Initial release of Git2Live, the Unified Multi-Cloud Application Deployment Framework.
 
 - FastAPI backend (SQLAlchemy 2.0, Pydantic) with Supabase Postgres support and SQLite for local dev.
 - Continue with Google sign-in; per-user projects, GitHub connections and deployments.

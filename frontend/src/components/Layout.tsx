@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../auth";
 import { SCHEMES, applyScheme, currentScheme } from "../theme";
 import { DialogHost } from "./Dialog";
+import { ErrorBoundary } from "./ErrorBoundary";
 import { Logo } from "./Logo";
 import {
   IconBook, IconCloud, IconFolder, IconGit, IconHelp, IconHistory, IconHome, IconLogout, IconMap, IconMenu, IconPlus, IconSettings,
@@ -63,12 +64,12 @@ export function Layout() {
   return (
     <div className="shell">
       <div className="topbar">
-        <Link to="/" className="brand"><Logo size={32} />CloudDeploy Hub</Link>
+        <Link to="/" className="brand"><Logo size={32} />Git2Live</Link>
         <button className="btn ghost" onClick={() => setOpen(true)} aria-label="Open navigation" aria-expanded={open}><IconMenu /></button>
       </div>
       {open && <div className="scrim" onClick={() => setOpen(false)} aria-hidden="true" />}
       <aside className={`sidebar ${open ? "open" : ""}`} aria-label="Main navigation">
-        <Link to="/" className="brand"><Logo />CloudDeploy Hub</Link>
+        <Link to="/" className="brand"><Logo />Git2Live</Link>
         <Link to="/projects/new" className="fab"><IconPlus size={22} />Add Project</Link>
         {GROUPS.map((g) => (
           <nav key={g.label} className="nav-group" aria-label={g.label}>
@@ -95,7 +96,7 @@ export function Layout() {
           )}
         </div>
       </aside>
-      <main className="main" id="main"><Outlet /></main>
+      <main className="main" id="main"><ErrorBoundary resetKey={location.pathname}><Outlet /></ErrorBoundary></main>
       <nav className="bottom-nav" aria-label="Quick navigation">
         {BOTTOM.map(({ to, label, icon: Icon, end }) => (
           <NavLink key={to} to={to} end={end} className={({ isActive }) => `bnav-item ${isActive ? "active" : ""}`}>

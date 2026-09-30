@@ -9,7 +9,8 @@ import { timeAgo, useApi } from "../hooks";
 interface Stats {
   projects: number; deployments: number; successful: number; failed: number; in_progress: number; live: number;
   github_connected: boolean; github_login: string | null; free_platforms: number; configured_platforms: number; recent: Deployment[];
-  timeline: DayPoint[]; by_provider: { provider: string; name: string; total: number; success: number }[];
+  // optional: an older backend build does not send these
+  timeline?: DayPoint[]; by_provider?: { provider: string; name: string; total: number; success: number }[];
 }
 
 export function Dashboard() {
@@ -23,7 +24,7 @@ export function Dashboard() {
         <div className="stack lg">
           <div className="stack">
             <h1>{first ? `Welcome, ${first}` : "Welcome"}</h1>
-            <p>One project, five free clouds. CloudDeploy Hub analyzes your app, deploys it through the platform's real API and hands back the live URL.</p>
+            <p>One project, five free clouds. Git2Live analyzes your app, deploys it through the platform's real API and hands back the live URL.</p>
           </div>
           <div className="row">
             <Link className="btn primary lg" to="/projects/new"><IconPlus size={18} />Add Project</Link>
@@ -66,7 +67,7 @@ export function Dashboard() {
                   <span><i style={{ background: "var(--md-tertiary)" }} />Live</span>
                 </div>
               </div>
-              <AreaChart data={data.timeline} />
+              <AreaChart data={data.timeline ?? []} />
               {data.deployments === 0 && <span className="subtle">Your deployments will draw this line as they happen.</span>}
             </div>
             <div className="card chart-card">
@@ -79,7 +80,7 @@ export function Dashboard() {
             </div>
             <div className="card chart-card">
               <div><h2>By platform</h2><span className="subtle">Where your deployments went</span></div>
-              <ProviderBars items={data.by_provider} />
+              <ProviderBars items={data.by_provider ?? []} />
             </div>
           </section>
 
@@ -88,7 +89,7 @@ export function Dashboard() {
               <h2>Recent deployments</h2>
               <Link to="/deployments" className="btn sm ghost">View all</Link>
             </div>
-            {data.recent.length === 0 ? (
+            {(data.recent ?? []).length === 0 ? (
               <Empty icon={<IconRocket />} title="No deployments yet" action={<Link className="btn primary" to="/projects/new">Add your first project</Link>}>
                 Each deployment shows its real provider status, logs, and the public URL once it's healthy.
               </Empty>

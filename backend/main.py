@@ -1,4 +1,4 @@
-"""CloudDeploy Hub API. Run from the repository root:  uvicorn backend.main:app --reload"""
+"""Git2Live API. Run from the repository root:  uvicorn backend.main:app --reload"""
 from __future__ import annotations
 
 import logging
@@ -25,7 +25,7 @@ async def lifespan(_app: FastAPI):
 
 
 app = FastAPI(
-    title="CloudDeploy Hub", version="1.0.0", lifespan=lifespan,
+    title="Git2Live", version=system.APP_VERSION, lifespan=lifespan,
     docs_url="/api/swagger", redoc_url=None, openapi_url="/api/openapi.json",
 )
 app.add_middleware(

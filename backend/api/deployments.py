@@ -149,7 +149,7 @@ async def deployment_logs(deployment_id: int, user: User = Depends(current_user)
             provider_error = str(exc)
     return {
         "hub_events": [
-            {"ts": iso(e.ts), "level": e.level, "message": e.message, "source": "clouddeploy-hub"}
+            {"ts": iso(e.ts), "level": e.level, "message": e.message, "source": "git2live"}
             for e in dep.events
         ],
         "provider_logs": provider_logs,

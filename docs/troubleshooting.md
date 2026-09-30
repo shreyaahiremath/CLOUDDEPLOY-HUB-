@@ -21,6 +21,6 @@
 | GitHub Pages: "private repository" | Pages on GitHub Free needs a public repo | Make the repo public, or choose Vercel/Netlify |
 | GitHub Pages: blank page, 404 assets | Wrong base path | Vite/CRA are handled automatically; other tools need a `/<repo>/` base |
 | Cloudflare: 403 from API | Token lacks Pages permission / wrong account ID | Create a token with *Cloudflare Pages: Edit* |
-| Actions run not found | Workflow registered slowly after commit | Select Try Again; CloudDeploy Hub retries dispatch automatically |
+| Actions run not found | Workflow registered slowly after commit | Select Try Again; Git2Live retries dispatch automatically |
 | "The uploaded files are no longer available" | Project uploaded while Supabase was not connected | Upload the project again |
 | Upload rejected: "Possible GitHub token on line N" | A secret is committed in your code | Remove it, use an environment variable, and rotate the secret |

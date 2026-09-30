@@ -1,13 +1,13 @@
 # FAQs
 
-### What is CloudDeploy Hub?
+### What is Git2Live?
 A web platform that takes your own application (from GitHub or an uploaded folder), analyzes it, and
 deploys it to a free cloud platform you choose through that platform's real API. You get back the real
 public URL only after it passes a health check.
 
 ### What is multi-cloud deployment?
 Deploying the same application to more than one cloud provider, or being able to choose between
-providers, without rewriting your deployment process for each one. CloudDeploy Hub gives five
+providers, without rewriting your deployment process for each one. Git2Live gives five
 providers one workflow: analyze → choose → preview → deploy → verify.
 
 ### Which platforms are supported?
@@ -24,7 +24,7 @@ provider's current terms always apply.
 
 ### How do I connect GitHub?
 Open **GitHub**, enter your username and select **Connect GitHub**. You approve access on github.com
-and are sent back to CloudDeploy Hub. Your password is never requested.
+and are sent back to Git2Live. Your password is never requested.
 
 ### Why is a GitHub username not authentication by itself?
 Anyone can type any username. Only GitHub's OAuth flow proves you control the account. The username
@@ -50,28 +50,28 @@ also go to GitHub Pages or Cloudflare Pages.
 Yes, on all five platforms.
 
 ### Why can't GitHub Pages run my FastAPI backend?
-GitHub Pages only serves static files. It has no server process to run Python, so CloudDeploy Hub
+GitHub Pages only serves static files. It has no server process to run Python, so Git2Live
 marks it as not compatible for backends.
 
 ### How does Render deployment work?
-CloudDeploy Hub calls the Render API to create a free web service (or static site) from your GitHub
+Git2Live calls the Render API to create a free web service (or static site) from your GitHub
 repository. Render builds and runs it, and the `onrender.com` URL comes from Render's response.
 
 ### How does Vercel deployment work?
 Your source files are uploaded to Vercel's file API and a production deployment is created. Vercel
-builds it and CloudDeploy Hub reads the production alias (`*.vercel.app`).
+builds it and Git2Live reads the production alias (`*.vercel.app`).
 
 ### How does Netlify deployment work?
 A zip of your source (plus a generated `netlify.toml` if needed) is sent to Netlify's Build API.
 Netlify builds and publishes it at the site's `netlify.app` URL.
 
 ### How does Cloudflare Pages deployment work?
-CloudDeploy Hub creates a Pages project through the Cloudflare API, adds a GitHub Actions workflow to
+Git2Live creates a Pages project through the Cloudflare API, adds a GitHub Actions workflow to
 your repository, and triggers it. The workflow builds your site and deploys it with Cloudflare's
 official `wrangler` CLI to `*.pages.dev`.
 
 ### How does GitHub Pages deployment work?
-CloudDeploy Hub enables Pages with GitHub Actions as the source, commits a workflow, and triggers it.
+Git2Live enables Pages with GitHub Actions as the source, commits a workflow, and triggers it.
 The workflow builds the site (with the correct base path) and publishes it with `actions/deploy-pages`.
 
 ### What happens if deployment fails?
@@ -80,7 +80,7 @@ You see **Deployment Failed** with the provider's actual error, the last log lin
 
 ### Where are deployment logs obtained from?
 From the provider: Render's logs API, Vercel deployment events, the Netlify deploy summary, and GitHub
-Actions job logs for GitHub Pages and Cloudflare Pages. CloudDeploy Hub's own orchestration events are
+Actions job logs for GitHub Pages and Cloudflare Pages. Git2Live's own orchestration events are
 shown in a separate tab and are labelled as such.
 
 ### How are credentials protected?

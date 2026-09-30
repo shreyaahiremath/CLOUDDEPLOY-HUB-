@@ -1,4 +1,4 @@
--- CloudDeploy Hub: complete Supabase schema.
+-- Git2Live: complete Supabase schema.
 -- Supabase → SQL Editor → New query → paste this whole file → Run. Safe to run more than once.
 -- Required: the backend uses Supabase's HTTPS API, which cannot create tables by itself.
 

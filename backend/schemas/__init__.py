@@ -144,6 +144,6 @@ def deployment_out(d: Deployment, *, events: bool = False) -> dict:
     }
     if events:
         out["events"] = [
-            {"ts": iso(e.ts), "level": e.level, "message": e.message, "source": "clouddeploy-hub"} for e in d.events
+            {"ts": iso(e.ts), "level": e.level, "message": e.message, "source": "git2live"} for e in d.events
         ]
     return out

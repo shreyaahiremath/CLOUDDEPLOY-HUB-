@@ -2,18 +2,18 @@
 
 ## Username vs. authentication
 
-The **GitHub Username** field records who you *say* you are. CloudDeploy Hub checks that the user
+The **GitHub Username** field records who you *say* you are. Git2Live checks that the user
 exists (`GET /users/{username}`), but a username alone grants no access. Anyone can type anyone's
 username. Access requires **Connect GitHub** (OAuth).
 
-After OAuth, CloudDeploy Hub compares the entered username with the authenticated login. If they
+After OAuth, Git2Live compares the entered username with the authenticated login. If they
 differ it shows a warning and uses the authenticated account. It never silently associates
 repositories with the wrong user.
 
 ## OAuth flow
 
 ```text
-CloudDeploy Hub → Connect GitHub → github.com/login/oauth/authorize (state bound to your session)
+Git2Live → Connect GitHub → github.com/login/oauth/authorize (state bound to your session)
 → you approve → /api/github/oauth/callback → code exchanged server-side → token encrypted in DB
 → back to the GitHub page: ✓ GitHub account verified
 ```
@@ -26,7 +26,7 @@ Requested scopes:
 | `workflow` | Commit the GitHub Pages / Cloudflare Pages workflow file |
 | `read:user` | Read your login and avatar |
 
-- CloudDeploy Hub never asks for or stores a GitHub password.
+- Git2Live never asks for or stores a GitHub password.
 - The token is never sent to the browser. **Disconnect** deletes it and revokes the grant on GitHub.
 - `state` values are single-use and expire after 15 minutes.
 
@@ -44,7 +44,7 @@ repository tree through the API and runs the Project Analyzer. Nothing is cloned
 3. **Publish Project to GitHub** creates the repository (`auto_init`) and pushes a single commit with
    the Git Data API (blobs → tree → commit → ref update).
 
-## Changes CloudDeploy Hub may make to your repository
+## Changes Git2Live may make to your repository
 
 Only when you deploy, and always listed in the Deployment Preview first:
 
