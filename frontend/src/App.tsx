@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import { BrowserRouter, Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "./auth";
 import { Layout } from "./components/Layout";
-import { Spinner } from "./components/ui";
 import { AddProject } from "./pages/AddProject";
 import { Architecture } from "./pages/Architecture";
 import { AuthCallback, Login } from "./pages/Auth";
@@ -21,7 +20,7 @@ import { Settings } from "./pages/Settings";
 function RequireAuth({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
   const location = useLocation();
-  if (loading) return <div style={{ display: "grid", placeItems: "center", height: "100vh" }}><Spinner label="Loading your workspace" /></div>;
+  if (loading) return <div style={{ display: "grid", placeItems: "center", height: "100vh" }}><span className="spinner lg" role="status" aria-label="Loading your workspace" /></div>;
   if (!user) return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   return <>{children}</>;
 }

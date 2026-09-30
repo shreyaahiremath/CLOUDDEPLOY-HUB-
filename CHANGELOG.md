@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.2.0 (2026-09-30)
+
+Material You (Material 3 Expressive) redesign. No feature or route was removed.
+
+- Dynamic colour: the whole palette is generated from a seed hue in OKLCH; six themes (Aurora default,
+  Ocean, Forest, Sunset, Blossom, Orchid) selectable in the drawer and in Settings.
+- New logo: rotating Material "cookie" shape with a hub mark; matching favicon.
+- Dashboard: animated area chart (last 14 days), success-rate ring, per-platform bars, all from real
+  counts (`/api/stats` now returns `timeline` and `by_provider`), plus the looping hub illustration.
+- Components: extended FAB, ripple, filter chips (History), wavy progress, shape-morphing loader,
+  Material confirm dialogs (replace browser pop-ups), bottom navigation on phones.
+- Motion: drifting aurora, flowing wave on the route strip, staggered entrances; disabled under
+  `prefers-reduced-motion`. The app is dark only.
+
 ## 1.1.0 (2026-09-30)
 
 - Database: Supabase is now used through its HTTPS API (project URL + secret key) instead of a Postgres

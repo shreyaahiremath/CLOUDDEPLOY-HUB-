@@ -1,10 +1,11 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { ACTIVE, type Deployment } from "../api";
-import { IconHistory } from "../components/icons";
+import { IconCheck, IconHistory } from "../components/icons";
 import { CardSkeleton, Empty, ErrorState, HealthBadge, PageHead, ProviderMark, StatusBadge, providerName, PROVIDER_META } from "../components/ui";
 import { useApi } from "../hooks";
 
 const STATUSES = ["SUCCESS", "FAILED", "BUILDING", "DEPLOYING", "DESTROYED"];
+const LABELS: Record<string, string> = { SUCCESS: "Live", FAILED: "Failed", BUILDING: "Building", DEPLOYING: "Deploying", DESTROYED: "Destroyed" };
 
 export function History() {
   const [params, setParams] = useSearchParams();
@@ -19,17 +20,23 @@ export function History() {
   return (
     <div className="page">
       <PageHead title="Deployment History" sub="Every deployment, with the provider's real deployment ID and URL." />
-      <div className="row">
-        <div className="field"><label htmlFor="fp">Platform</label>
-          <select id="fp" className="input" value={provider} onChange={(e) => setFilter("provider", e.target.value)}>
-            <option value="">All platforms</option>
-            {Object.entries(PROVIDER_META).map(([k, m]) => <option key={k} value={k}>{m.name}</option>)}
-          </select></div>
-        <div className="field"><label htmlFor="fs">Status</label>
-          <select id="fs" className="input" value={status} onChange={(e) => setFilter("status", e.target.value)}>
-            <option value="">All statuses</option>
-            {STATUSES.map((s) => <option key={s}>{s}</option>)}
-          </select></div>
+      <div className="stack">
+        <div className="chips" role="group" aria-label="Filter by platform">
+          <button className="chip" aria-pressed={!provider} onClick={() => setFilter("provider", "")}>{!provider && <IconCheck size={16} />}All platforms</button>
+          {Object.entries(PROVIDER_META).map(([k, m]) => (
+            <button key={k} className="chip" aria-pressed={provider === k} onClick={() => setFilter("provider", provider === k ? "" : k)}>
+              {provider === k && <IconCheck size={16} />}{m.name}
+            </button>
+          ))}
+        </div>
+        <div className="chips" role="group" aria-label="Filter by status">
+          <button className="chip" aria-pressed={!status} onClick={() => setFilter("status", "")}>{!status && <IconCheck size={16} />}All statuses</button>
+          {STATUSES.map((s) => (
+            <button key={s} className="chip" aria-pressed={status === s} onClick={() => setFilter("status", status === s ? "" : s)}>
+              {status === s && <IconCheck size={16} />}{LABELS[s]}
+            </button>
+          ))}
+        </div>
       </div>
       {error && <ErrorState message={error} onRetry={reload} />}
       {loading && !data ? <CardSkeleton rows={5} /> : data && data.length === 0 ? (

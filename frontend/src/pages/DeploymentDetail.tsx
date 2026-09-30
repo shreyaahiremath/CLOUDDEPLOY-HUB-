@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ACTIVE, api, type Deployment, type LogLine } from "../api";
+import { WavyProgress } from "../components/charts";
+import { confirmDialog } from "../components/Dialog";
 import { IconExternal, IconRefresh, IconTrash } from "../components/icons";
 import { RouteStrip } from "../components/RouteStrip";
 import { Alert, CardSkeleton, CopyButton, ErrorState, HealthBadge, PageHead, ProviderMark, Spinner, StatusBadge } from "../components/ui";
@@ -23,7 +25,11 @@ export function DeploymentDetail() {
     try { await fn(); } catch (e) { setError((e as Error).message); } finally { setBusy(null); }
   };
   const destroy = () => act("destroy", async () => {
-    if (!window.confirm(`Destroy this ${d?.provider_name} deployment? The provider resource and its URL will be deleted.`)) return;
+    const ok = await confirmDialog({
+      title: "Destroy this deployment?", danger: true, confirmLabel: "Destroy",
+      body: `The ${d?.provider_name} resource and its public URL will be deleted. This can't be undone.`,
+    });
+    if (!ok) return;
     dep.setData(await api<Deployment>(`/api/deployments/${id}/destroy`, { method: "POST" }));
   });
   const retry = () => act("retry", async () => {
@@ -48,7 +54,10 @@ export function DeploymentDetail() {
         actions={<StatusBadge status={d.status} />}
       />
 
-      <section className="card"><RouteStrip d={d} /></section>
+      <section className="card stack lg">
+        <RouteStrip d={d} />
+        {active && <WavyProgress label={`Deployment ${d.status.toLowerCase().replace("_", " ")}`} />}
+      </section>
 
       {d.status === "SUCCESS" && d.public_url && (
         <section className="card ticket stack">

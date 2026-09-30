@@ -1,9 +1,11 @@
-import { useEffect, useState, type ComponentType } from "react";
+import { useEffect, useState, type ComponentType, type CSSProperties } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../auth";
+import { SCHEMES, applyScheme, currentScheme } from "../theme";
+import { DialogHost } from "./Dialog";
+import { Logo } from "./Logo";
 import {
-  IconBook, IconCloud, IconFolder, IconGit, IconHelp, IconHistory, IconHome, IconLogout, IconMap, IconMenu,
-  IconPlus, IconSettings,
+  IconBook, IconCloud, IconFolder, IconGit, IconHelp, IconHistory, IconHome, IconLogout, IconMap, IconMenu, IconPlus, IconSettings,
 } from "./icons";
 
 type Item = { to: string; label: string; icon: ComponentType<{ size?: number }>; end?: boolean };
@@ -11,7 +13,6 @@ const GROUPS: { label: string; items: Item[] }[] = [
   { label: "Deploy", items: [
     { to: "/", label: "Dashboard", icon: IconHome, end: true },
     { to: "/projects", label: "Projects", icon: IconFolder, end: true },
-    { to: "/projects/new", label: "Add Project", icon: IconPlus },
     { to: "/deployments", label: "Deployment History", icon: IconHistory },
   ] },
   { label: "Connect", items: [
@@ -25,14 +26,26 @@ const GROUPS: { label: string; items: Item[] }[] = [
     { to: "/faqs", label: "FAQs", icon: IconHelp },
   ] },
 ];
+const BOTTOM: Item[] = [
+  { to: "/", label: "Home", icon: IconHome, end: true },
+  { to: "/projects", label: "Projects", icon: IconFolder, end: true },
+  { to: "/projects/new", label: "Add", icon: IconPlus },
+  { to: "/deployments", label: "History", icon: IconHistory },
+];
 
-export function Logo() {
+/** Theme colour picker: the whole UI re-tints from the chosen seed (Material You dynamic colour). */
+export function SchemePicker() {
+  const [active, setActive] = useState(() => currentScheme().key);
   return (
-    <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
-      <rect width="32" height="32" rx="10" fill="#4f378b" />
-      <circle cx="9" cy="16" r="3" fill="#eaddff" /><circle cx="23" cy="9" r="2.5" fill="#eaddff" /><circle cx="23" cy="23" r="2.5" fill="#efb8c8" />
-      <path d="M11.5 15 20.6 10M11.5 17l9.1 5" stroke="#eaddff" strokeWidth="2" strokeLinecap="round" />
-    </svg>
+    <div className="scheme-dots" role="radiogroup" aria-label="Theme colour">
+      {SCHEMES.map((s) => (
+        <button
+          key={s.key} type="button" role="radio" aria-checked={active === s.key} aria-label={`${s.name} theme`} title={s.name}
+          className="scheme-dot" style={{ "--h": s.hue, "--h3": s.hue3 } as CSSProperties}
+          onClick={() => { applyScheme(s); setActive(s.key); }}
+        />
+      ))}
+    </div>
   );
 }
 
@@ -50,23 +63,28 @@ export function Layout() {
   return (
     <div className="shell">
       <div className="topbar">
-        <Link to="/" className="brand"><Logo />CloudDeploy Hub</Link>
+        <Link to="/" className="brand"><Logo size={32} />CloudDeploy Hub</Link>
         <button className="btn ghost" onClick={() => setOpen(true)} aria-label="Open navigation" aria-expanded={open}><IconMenu /></button>
       </div>
       {open && <div className="scrim" onClick={() => setOpen(false)} aria-hidden="true" />}
       <aside className={`sidebar ${open ? "open" : ""}`} aria-label="Main navigation">
         <Link to="/" className="brand"><Logo />CloudDeploy Hub</Link>
+        <Link to="/projects/new" className="fab"><IconPlus size={22} />Add Project</Link>
         {GROUPS.map((g) => (
           <nav key={g.label} className="nav-group" aria-label={g.label}>
             <div className="nav-label">{g.label}</div>
             {g.items.map(({ to, label, icon: Icon, end }) => (
               <NavLink key={to} to={to} end={end} className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
-                <Icon size={18} />{label}
+                <Icon size={20} />{label}
               </NavLink>
             ))}
           </nav>
         ))}
         <div className="sidebar-foot">
+          <div>
+            <div className="nav-label">Theme colour</div>
+            <SchemePicker />
+          </div>
           {user && (
             <div className="user-chip">
               {user.avatar_url ? <img src={user.avatar_url} alt="" referrerPolicy="no-referrer" /> : <span className="avatar" />}
@@ -78,6 +96,17 @@ export function Layout() {
         </div>
       </aside>
       <main className="main" id="main"><Outlet /></main>
+      <nav className="bottom-nav" aria-label="Quick navigation">
+        {BOTTOM.map(({ to, label, icon: Icon, end }) => (
+          <NavLink key={to} to={to} end={end} className={({ isActive }) => `bnav-item ${isActive ? "active" : ""}`}>
+            <span className="pill"><Icon size={22} /></span>{label}
+          </NavLink>
+        ))}
+        <button className="bnav-item" onClick={() => setOpen(true)} aria-label="More pages">
+          <span className="pill"><IconMenu size={22} /></span>More
+        </button>
+      </nav>
+      <DialogHost />
     </div>
   );
 }

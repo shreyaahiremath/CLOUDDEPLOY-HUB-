@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { api, type Project } from "../api";
+import { confirmDialog } from "../components/Dialog";
 import { IconGit, IconRefresh, IconRocket, IconTrash } from "../components/icons";
 import { Alert, CardSkeleton, ErrorState, PageHead, Spinner } from "../components/ui";
 import { formatBytes, useApi } from "../hooks";
@@ -28,7 +29,11 @@ export function ProjectDetail() {
     setRootDir(null);
   });
   const remove = () => act("delete", async () => {
-    if (!window.confirm(`Delete project "${p?.name}"? Its uploaded files and deployment history will be removed.`)) return;
+    const ok = await confirmDialog({
+      title: `Delete "${p?.name}"?`, danger: true, confirmLabel: "Delete project",
+      body: "Its uploaded files and deployment history will be removed.",
+    });
+    if (!ok) return;
     await api(`/api/projects/${id}`, { method: "DELETE" });
     navigate("/projects");
   });

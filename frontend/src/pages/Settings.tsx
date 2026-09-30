@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth";
+import { SchemePicker } from "../components/Layout";
 import { IconCheck, IconX } from "../components/icons";
 import { Alert, CardSkeleton, CopyButton, ErrorState, PageHead } from "../components/ui";
 import { useApi } from "../hooks";
@@ -25,6 +26,11 @@ export function Settings() {
           <dt>Sign-in</dt><dd>Google</dd>
         </dl>
         <div className="row"><button className="btn" onClick={() => void signOut()}>Sign out</button><Link className="btn" to="/github">Manage GitHub connection</Link></div>
+      </section>
+      <section className="card stack">
+        <h2>Appearance</h2>
+        <p className="muted">Pick a colour. Every surface, button and chart re-tints from it, the way Material You themes a phone from its wallpaper.</p>
+        <SchemePicker />
       </section>
       {error && <ErrorState message={error} onRetry={reload} />}
       {loading && !data ? <CardSkeleton rows={6} /> : data && (

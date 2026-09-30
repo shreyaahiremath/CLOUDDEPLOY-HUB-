@@ -1,3 +1,4 @@
+import { HubOrbit } from "../components/charts";
 import { PageHead } from "../components/ui";
 
 const DIAGRAM = String.raw`                    CloudDeploy Hub
@@ -46,7 +47,13 @@ export function Architecture() {
   return (
     <div className="page">
       <PageHead title="Architecture" sub="Unified Multi-Cloud Application Deployment Framework" />
-      <section className="card"><pre className="code" aria-label="Architecture diagram" style={{ fontSize: 13 }}>{DIAGRAM}</pre></section>
+      <section className="grid cols-2" style={{ alignItems: "center" }}>
+        <div className="card"><pre className="code" aria-label="Architecture diagram" style={{ fontSize: 12.5 }}>{DIAGRAM}</pre></div>
+        <div className="card stack" style={{ alignItems: "center", textAlign: "center" }}>
+          <HubOrbit />
+          <p className="muted">One project fans out from the hub to five free platforms. Each one returns its own real URL.</p>
+        </div>
+      </section>
       <section className="card stack">
         <h2>Layers</h2>
         <dl className="kv">{LAYERS.map(([k, v]) => <div key={k} style={{ display: "contents" }}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>

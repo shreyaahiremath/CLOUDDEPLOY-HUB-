@@ -193,3 +193,19 @@ def test_health_check_against_real_http(monkeypatch):
         assert result.healthy and "/" in result.detail
         respx.get("https://down.example/").mock(side_effect=httpx.ConnectError("boom"))
         assert not asyncio.run(check_once("https://down.example", ["/"])).healthy
+
+
+def test_stats_timeline_and_provider_breakdown_use_real_counts(client, db, project):
+    ok = make_dep(db, project)
+    ok.status = S.SUCCESS
+    bad = make_dep(db, project)
+    bad.status = S.FAILED
+    db.commit()
+    stats = client.get("/api/stats").json()
+    assert len(stats["timeline"]) == 14
+    today = stats["timeline"][-1]
+    assert (today["total"], today["success"], today["failed"]) == (2, 1, 1)
+    assert sum(d["total"] for d in stats["timeline"][:-1]) == 0
+    render = next(p for p in stats["by_provider"] if p["provider"] == "render")
+    assert (render["total"], render["success"]) == (2, 1)
+    assert len(stats["by_provider"]) == 5

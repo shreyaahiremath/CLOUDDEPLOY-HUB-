@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func
 from sqlalchemy.orm import Session
@@ -13,6 +15,7 @@ from backend.services.deployment import all_providers
 from backend.services.deployment.capabilities import CATALOG, FREE_PLAN_NOTICE
 from backend.services import supabase_store
 from backend.services.github import get_connection
+from backend.services.supabase_store import as_utc
 
 router = APIRouter(prefix="/api", tags=["system"])
 
@@ -52,7 +55,35 @@ def stats(user: User = Depends(current_user), db: Session = Depends(get_db)) -> 
         "free_platforms": len(CATALOG),
         "configured_platforms": sum(1 for p in all_providers() if p.is_configured()),
         "recent": [deployment_out(d) for d in recent],
+        "timeline": _timeline(mine.all()),
+        "by_provider": _by_provider(mine.all()),
     }
+
+
+def _timeline(rows: list[Deployment], days: int = 14) -> list[dict]:
+    """Deployments per day for the last `days` days (UTC), oldest first. Real counts only."""
+    today = datetime.now(timezone.utc).date()
+    buckets = {today - timedelta(days=i): {"total": 0, "success": 0, "failed": 0} for i in range(days)}
+    for d in rows:
+        day = as_utc(d.created_at).date()
+        if day in buckets:
+            buckets[day]["total"] += 1
+            if d.status == S.SUCCESS:
+                buckets[day]["success"] += 1
+            elif d.status == S.FAILED:
+                buckets[day]["failed"] += 1
+    return [{"date": day.isoformat(), **buckets[day]} for day in sorted(buckets)]
+
+
+def _by_provider(rows: list[Deployment]) -> list[dict]:
+    out = []
+    for p in all_providers():
+        mine = [d for d in rows if d.provider == p.key]
+        out.append({
+            "provider": p.key, "name": p.name, "total": len(mine),
+            "success": sum(1 for d in mine if d.status == S.SUCCESS),
+        })
+    return out
 
 
 @router.get("/providers")

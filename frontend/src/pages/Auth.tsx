@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { api } from "../api";
 import { useAuth } from "../auth";
-import { Logo } from "../components/Layout";
+import { HubOrbit } from "../components/charts";
+import { Logo } from "../components/Logo";
 import { GoogleMark } from "../components/icons";
 import { Alert, Spinner } from "../components/ui";
 import { useApi } from "../hooks";
@@ -35,18 +36,12 @@ export function Login() {
   return (
     <div className="login">
       <section className="login-art" aria-hidden="true">
-        <div className="brand" style={{ color: "#fff" }}><Logo />CloudDeploy Hub</div>
+        <div className="brand" style={{ color: "inherit", padding: 0 }}><Logo size={40} />CloudDeploy Hub</div>
         <div className="stack lg">
           <h1>One project. Five free clouds. Real URLs.</h1>
           <p>Bring your own app from GitHub or your laptop. CloudDeploy Hub analyzes it, shows which free platforms can actually run it, deploys it through each provider's official API, and checks that the live URL answers.</p>
         </div>
-        <div className="login-routes">
-          <div><i />your-app → <b>Render</b> · web service</div>
-          <div><i />your-app → <b>Vercel</b> · production</div>
-          <div><i />your-app → <b>Netlify</b> · build API</div>
-          <div><i />your-app → <b>GitHub Pages</b> · Actions</div>
-          <div><i />your-app → <b>Cloudflare Pages</b> · wrangler</div>
-        </div>
+        <HubOrbit />
       </section>
       <section className="login-panel">
         <div className="login-box">
@@ -90,5 +85,5 @@ export function AuthCallback() {
     if (token) void signIn(token).then(() => navigate("/", { replace: true }));
     else navigate("/login", { replace: true, state: { error: params.get("error") ?? "Sign-in did not complete." } });
   }, [signIn, navigate]);
-  return <div style={{ display: "grid", placeItems: "center", height: "100vh" }}><Spinner label="Signing you in" /></div>;
+  return <div style={{ display: "grid", placeItems: "center", height: "100vh" }}><span className="spinner lg" role="status" aria-label="Signing you in" /></div>;
 }
